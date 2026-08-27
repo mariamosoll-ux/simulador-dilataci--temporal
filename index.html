@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simulador de dilatació temporal</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0b132b;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #111c3a;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #c9d2e3;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .panel {
+            background-color: #111c3a;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+        }
+
+        .control {
+            margin: 25px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .value {
+            color: #72b7ff;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .result {
+            background-color: #18264a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .result h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #b9c7dd;
+        }
+
+        .number {
+            font-size: 25px;
+            font-weight: bold;
+            color: #72b7ff;
+        }
+
+        .comparison {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #18264a;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            color: #9ba9bf;
+            padding: 30px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+
+        <h1>Simulador de dilatació temporal</h1>
+
+        <p>
+            Simulador interactiu desenvolupat per estudiar la dilatació
+            temporal en les proximitats d'un forat negre i analitzar
+            el cas del planeta Miller de la pel·lícula
+            <i>Interstellar</i>.
+        </p>
+
+    </header>
+
+
+    <main>
+
+        <!-- PARÀMETRES -->
+
+        <section class="panel">
+
+            <h2>Paràmetres del sistema</h2>
+
+            <div class="control">
+
+                <label>
+                    Massa del forat negre:
+                    <span class="value" id="massValue">100 M☉</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="mass"
+                    min="1"
+                    max="1000"
+                    value="100"
+                >
+
+            </div>
+
+
+            <div class="control">
+
+                <label>
+                    Distància orbital:
+                    <span class="value" id="radiusValue">3 Rs</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="radius"
+                    min="1.01"
+                    max="20"
+                    step="0.01"
+                    value="3"
+                >
+
+            </div>
+
+
+            <div class="control">
+
+                <label>
+                    Velocitat del planeta:
+                    <span class="value" id="speedValue">0.80 c</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="speed"
+                    min="0"
+                    max="0.99"
+                    step="0.01"
+                    value="0.80"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- RESULTATS -->
+
+        <section class="panel">
+
+            <h2>Resultats</h2>
+
+            <div class="results">
+
+                <div class="result">
+
+                    <h3>Radi de Schwarzschild</h3>
+
+                    <div
+                        class="number"
+                        id="schwarzschildRadius">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result">
+
+                    <h3>Distància orbital</h3>
+
+                    <div
+                        class="number"
+                        id="orbitalRadius">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result">
+
+                    <h3>Dilatació gravitatòria</h3>
+
+                    <div
+                        class="number"
+                        id="gravitationalFactor">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result">
+
+                    <h3>Dilatació cinemàtica</h3>
+
+                    <div
+                        class="number"
+                        id="kinematicFactor">
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="comparison">
+
+                <h2>Comparació temporal</h2>
+
+                <p>
+                    Amb els paràmetres seleccionats:
+                </p>
+
+                <div
+                    class="number"
+                    id="timeComparison">
+                    -
+                </div>
+
+                <p>
+                    Referència d'<i>Interstellar</i>:
+                    <strong>1 hora = 7 anys</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- EXPLICACIÓ -->
+
+        <section class="panel">
+
+            <h2>Sobre el model</h2>
+
+            <p>
+                El simulador utilitza el radi de Schwarzschild per
+                determinar l'escala de distàncies respecte del forat negre.
+            </p>
+
+            <p>
+                La dilatació temporal gravitacional es calcula a partir
+                de la relació de Schwarzschild:
+            </p>
+
+            <p>
+                <strong>
+                    D<sub>g</sub> =
+                    1 / √(1 - R<sub>s</sub>/r)
+                </strong>
+            </p>
+
+            <p>
+                La dilatació temporal associada al moviment es calcula
+                mitjançant el factor de Lorentz:
+            </p>
+
+            <p>
+                <strong>
+                    D<sub>v</sub> =
+                    1 / √(1 - v²/c²)
+                </strong>
+            </p>
+
+            <p>
+                Els dos efectes es calculen separadament per poder
+                analitzar quina contribució té cadascun.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Treball de Recerca · Dilatació temporal i forats negres
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        // Constants físiques
+
+        const G = 6.67430e-11;
+        const c = 299792458;
+        const massaSolar = 1.98847e30;
+
+
+        // Elements de la pàgina
+
+        const mass = document.getElementById("mass");
+        const radius = document.getElementById("radius");
+        const speed = document.getElementById("speed");
+
+
+        // Actualitzar simulador
+
+        function actualitzarSimulador() {
+
+            // Valors introduïts
+
+            const M = Number(mass.value);
+            const rRelatiu = Number(radius.value);
+            const beta = Number(speed.value);
+
+
+            // Massa en kg
+
+            const massaKg = M * massaSolar;
+
+
+            // Radi de Schwarzschild
+
+            const Rs =
+                (2 * G * massaKg) /
+                (c * c);
+
+
+            // Distància orbital
+
+            const r =
+                rRelatiu * Rs;
+
+
+            // Dilatació gravitatòria
+
+            const Dg =
+                1 / Math.sqrt(1 - Rs / r);
+
+
+            // Dilatació cinemàtica
+
+            const Dv =
+                1 / Math.sqrt(1 - beta * beta);
+
+
+            // Actualitzar textos
+
+            document.getElementById("massValue").textContent =
+                M + " M☉";
+
+            document.getElementById("radiusValue").textContent =
+                rRelatiu.toFixed(2) + " Rs";
+
+            document.getElementById("speedValue").textContent =
+                beta.toFixed(2) + " c";
+
+
+            // Radi de Schwarzschild
+
+            document.getElementById("schwarzschildRadius").textContent =
+                (Rs / 1000).toFixed(2) + " km";
+
+
+            // Distància orbital
+
+            document.getElementById("orbitalRadius").textContent =
+                (r / 1000).toFixed(2) + " km";
+
+
+            // Factors de dilatació
+
+            document.getElementById("gravitationalFactor").textContent =
+                Dg.toFixed(3);
+
+
+            document.getElementById("kinematicFactor").textContent =
+                Dv.toFixed(3);
+
+
+            // Model simplificat
+
+            const factorTotal =
+                Dg * Dv;
+
+
+            // 1 hora al planeta
+
+            const horesTerra =
+                factorTotal;
+
+
+            const anysTerra =
+                horesTerra / (24 * 365.25);
+
+
+            document.getElementById("timeComparison").textContent =
+                "1 hora → " +
+                anysTerra.toFixed(3) +
+                " anys a la Terra";
+
+        }
+
+
+        // Actualitzar quan es mouen els sliders
+
+        mass.addEventListener(
+            "input",
+            actualitzarSimulador
+        );
+
+        radius.addEventListener(
+            "input",
+            actualitzarSimulador
+        );
+
+        speed.addEventListener(
+            "input",
+            actualitzarSimulador
+        );
+
+
+        // Primera actualització
+
+        actualitzarSimulador();
+
+    </script>
+
+</body>
+
+</html>
