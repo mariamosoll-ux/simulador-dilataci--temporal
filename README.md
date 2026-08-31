@@ -3,3 +3,5 @@ Simulador interactiu de dilatació temporal desenvolupat com a part pràctica d�
 <br>
 <br>
 <a href="#explicacio">Entén la dilatació temporal</a>
+
+<h2 id="explicacio">Entén la dilatació temporal</h2>
