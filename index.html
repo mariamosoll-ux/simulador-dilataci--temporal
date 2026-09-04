@@ -74,3 +74,956 @@ Simulador interactiu de dilatació temporal desenvolupat com a part pràctica d�
     Entén la dilatació temporal
 </a>
 </html>
+
+    ```html
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulador de dilatació temporal</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #061a2d;
+    color: white;
+    margin: 0;
+}
+
+header {
+    text-align: center;
+    padding: 70px 20px;
+    background-color: #082b4a;
+}
+
+h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+header p {
+    max-width: 750px;
+    margin: auto;
+    color: #cfe2f3;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.boto {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    background-color: #0b5394;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.boto:hover {
+    background-color: #3d85c6;
+}
+
+main {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.apartat {
+    background-color: #082b4a;
+    padding: 30px;
+    margin-bottom: 40px;
+    border-radius: 15px;
+}
+
+h2 {
+    color: #6fa8dc;
+}
+
+.descripcio {
+    color: #cfe2f3;
+    line-height: 1.6;
+}
+
+.control {
+    margin-top: 30px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 12px;
+}
+
+input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+
+.valor {
+    font-size: 22px;
+    font-weight: bold;
+    color: #9fc5e8;
+    margin-top: 10px;
+}
+
+.constants {
+    background-color: #061a2d;
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 1.8;
+    margin-top: 25px;
+}
+
+.resultat {
+    background-color: #e8f1fa;
+    color: #082b4a;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.resultat h3 {
+    margin-top: 0;
+}
+
+.numero {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0b5394;
+}
+
+.grafica {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #9fc5e8;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>Simulador de dilatació temporal</h1>
+
+    <p>
+        Simulador interactiu per estudiar com diferents paràmetres
+        influeixen en la dilatació temporal.
+    </p>
+
+    <a href="explicacio.html" class="boto">
+        Entén la dilatació temporal
+    </a>
+
+</header>
+
+
+<main>
+
+
+<!-- ================================================= -->
+<!-- 1. DILATACIÓ CINEMÀTICA -->
+<!-- ================================================= -->
+
+<section class="apartat">
+
+    <h2>1. Dilatació temporal cinemàtica</h2>
+
+    <p class="descripcio">
+        En aquest apartat s'estudia l'efecte de la velocitat sobre
+        la dilatació temporal. La velocitat és l'únic paràmetre
+        que es pot modificar.
+    </p>
+
+
+    <div class="constants">
+
+        <strong>Valors constants</strong><br>
+
+        Temps propi:
+        <strong>1 hora</strong>
+
+    </div>
+
+
+    <div class="control">
+
+        <label for="sliderVelocitat">
+            Velocitat del planeta
+        </label>
+
+        <input
+            type="range"
+            id="sliderVelocitat"
+            min="0"
+            max="0.999"
+            step="0.001"
+            value="0.5"
+        >
+
+        <div class="valor" id="valorVelocitat">
+            50,0 % de c
+        </div>
+
+    </div>
+
+
+    <div class="resultat">
+
+        <h3>Factor de dilatació</h3>
+
+        <div class="numero" id="resultatCinematic">
+            1,155
+        </div>
+
+    </div>
+
+
+    <div class="grafica">
+
+        <canvas id="graficaCinematic"></canvas>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- 2. DILATACIÓ GRAVITACIONAL: MASSA -->
+<!-- ================================================= -->
+
+<section class="apartat">
+
+    <h2>2. Efecte de la massa</h2>
+
+    <p class="descripcio">
+        En aquest apartat s'estudia com varia la dilatació temporal
+        gravitacional quan es modifica la massa del cos central.
+        La distància es manté constant.
+    </p>
+
+
+    <div class="constants">
+
+        <strong>Valors constants</strong><br>
+
+        Distància al centre:
+        <strong>10 km</strong><br>
+
+        Temps propi:
+        <strong>1 hora</strong>
+
+    </div>
+
+
+    <div class="control">
+
+        <label for="sliderMassa">
+            Massa del forat negre
+        </label>
+
+        <input
+            type="range"
+            id="sliderMassa"
+            min="1"
+            max="10"
+            step="0.1"
+            value="5"
+        >
+
+        <div class="valor" id="valorMassa">
+            5,0 × 10³⁰ kg
+        </div>
+
+    </div>
+
+
+    <div class="resultat">
+
+        <h3>Factor de dilatació gravitacional</h3>
+
+        <div class="numero" id="resultatMassa">
+            --
+        </div>
+
+    </div>
+
+
+    <div class="grafica">
+
+        <canvas id="graficaMassa"></canvas>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- 3. DILATACIÓ GRAVITACIONAL: DISTÀNCIA -->
+<!-- ================================================= -->
+
+<section class="apartat">
+
+    <h2>3. Efecte de la distància</h2>
+
+    <p class="descripcio">
+        En aquest apartat s'estudia com varia la dilatació temporal
+        gravitacional quan es modifica la distància al centre del
+        forat negre. La massa es manté constant.
+    </p>
+
+
+    <div class="constants">
+
+        <strong>Valors constants</strong><br>
+
+        Massa:
+        <strong>5 × 10³⁰ kg</strong><br>
+
+        Temps propi:
+        <strong>1 hora</strong>
+
+    </div>
+
+
+    <div class="control">
+
+        <label for="sliderDistancia">
+            Distància al centre
+        </label>
+
+        <input
+            type="range"
+            id="sliderDistancia"
+            min="1000"
+            max="100000"
+            step="1000"
+            value="10000"
+        >
+
+        <div class="valor" id="valorDistancia">
+            10 km
+        </div>
+
+    </div>
+
+
+    <div class="resultat">
+
+        <h3>Factor de dilatació gravitacional</h3>
+
+        <div class="numero" id="resultatDistancia">
+            --
+        </div>
+
+    </div>
+
+
+    <div class="grafica">
+
+        <canvas id="graficaDistancia"></canvas>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================================= -->
+<!-- 4. COMPARACIÓ AMB INTERSTELLAR -->
+<!-- ================================================= -->
+
+<section class="apartat">
+
+    <h2>4. Comparació amb Interstellar</h2>
+
+    <p class="descripcio">
+        En aquest apartat es compara la relació temporal mostrada
+        a la pel·lícula <em>Interstellar</em> amb el resultat obtingut
+        mitjançant els càlculs del treball.
+    </p>
+
+
+    <div class="resultat">
+
+        <h3>Relació temporal de la pel·lícula</h3>
+
+        <div class="numero">
+            1 hora = 7 anys
+        </div>
+
+    </div>
+
+
+    <div class="constants">
+
+        Aquesta comparació permet determinar fins a quin punt
+        el resultat del model utilitzat s'aproxima al valor
+        representat a la pel·lícula.
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+    Simulador desenvolupat com a part pràctica d'un
+    Treball de Recerca de Batxillerat.
+
+</footer>
+
+
+
+<script>
+
+
+/* ================================================= */
+/* CONSTANTS FÍSIQUES */
+/* ================================================= */
+
+const G = 6.67430e-11;
+
+const c = 3.00e8;
+
+
+/* ================================================= */
+/* DILATACIÓ CINEMÀTICA */
+/* ================================================= */
+
+function dilatacioCinematica(v) {
+
+    return 1 / Math.sqrt(
+        1 - v * v
+    );
+
+}
+
+
+/* ================================================= */
+/* DILATACIÓ GRAVITACIONAL */
+/* ================================================= */
+
+function dilatacioGravitacional(M, r) {
+
+    const terme =
+        1 - (2 * G * M) / (r * c * c);
+
+    if (terme <= 0) {
+        return NaN;
+    }
+
+    return 1 / Math.sqrt(terme);
+
+}
+
+
+/* ================================================= */
+/* APARTAT 1 — VELOCITAT */
+/* ================================================= */
+
+const sliderVelocitat =
+    document.getElementById("sliderVelocitat");
+
+const valorVelocitat =
+    document.getElementById("valorVelocitat");
+
+const resultatCinematic =
+    document.getElementById("resultatCinematic");
+
+
+function actualitzarCinematic() {
+
+    const v =
+        parseFloat(sliderVelocitat.value);
+
+    const factor =
+        dilatacioCinematica(v);
+
+
+    valorVelocitat.textContent =
+        (v * 100).toFixed(1).replace(".", ",")
+        + " % de c";
+
+
+    resultatCinematic.textContent =
+        factor.toFixed(3).replace(".", ",");
+
+
+    graficaCinematic.data.datasets[0].data =
+        generarDadesVelocitat();
+
+    graficaCinematic.update();
+
+}
+
+
+function generarDadesVelocitat() {
+
+    const dades = [];
+
+    for (let v = 0; v <= 0.999; v += 0.005) {
+
+        dades.push({
+            x: v * 100,
+            y: dilatacioCinematica(v)
+        });
+
+    }
+
+    return dades;
+
+}
+
+
+/* ================================================= */
+/* APARTAT 2 — MASSA */
+/* ================================================= */
+
+const sliderMassa =
+    document.getElementById("sliderMassa");
+
+const valorMassa =
+    document.getElementById("valorMassa");
+
+const resultatMassa =
+    document.getElementById("resultatMassa");
+
+
+function actualitzarMassa() {
+
+    const massa =
+        parseFloat(sliderMassa.value) * 1e30;
+
+    const r = 10000;
+
+
+    const factor =
+        dilatacioGravitacional(
+            massa,
+            r
+        );
+
+
+    valorMassa.textContent =
+        parseFloat(sliderMassa.value)
+        .toFixed(1)
+        .replace(".", ",")
+        + " × 10³⁰ kg";
+
+
+    if (isNaN(factor)) {
+
+        resultatMassa.textContent =
+            "Fora del model";
+
+    } else {
+
+        resultatMassa.textContent =
+            factor.toFixed(3).replace(".", ",");
+
+    }
+
+
+    graficaMassa.data.datasets[0].data =
+        generarDadesMassa();
+
+    graficaMassa.update();
+
+}
+
+
+function generarDadesMassa() {
+
+    const dades = [];
+
+    for (let M = 1; M <= 10; M += 0.1) {
+
+        const factor =
+            dilatacioGravitacional(
+                M * 1e30,
+                10000
+            );
+
+        if (!isNaN(factor)) {
+
+            dades.push({
+                x: M,
+                y: factor
+            });
+
+        }
+
+    }
+
+    return dades;
+
+}
+
+
+/* ================================================= */
+/* APARTAT 3 — DISTÀNCIA */
+/* ================================================= */
+
+const sliderDistancia =
+    document.getElementById("sliderDistancia");
+
+const valorDistancia =
+    document.getElementById("valorDistancia");
+
+const resultatDistancia =
+    document.getElementById("resultatDistancia");
+
+
+function actualitzarDistancia() {
+
+    const r =
+        parseFloat(sliderDistancia.value);
+
+    const M =
+        5e30;
+
+
+    const factor =
+        dilatacioGravitacional(
+            M,
+            r
+        );
+
+
+    valorDistancia.textContent =
+        (r / 1000)
+        .toFixed(0)
+        + " km";
+
+
+    if (isNaN(factor)) {
+
+        resultatDistancia.textContent =
+            "Fora del model";
+
+    } else {
+
+        resultatDistancia.textContent =
+            factor.toFixed(3).replace(".", ",");
+
+    }
+
+
+    graficaDistancia.data.datasets[0].data =
+        generarDadesDistancia();
+
+    graficaDistancia.update();
+
+}
+
+
+function generarDadesDistancia() {
+
+    const dades = [];
+
+    for (
+        let r = 1000;
+        r <= 100000;
+        r += 1000
+    ) {
+
+        const factor =
+            dilatacioGravitacional(
+                5e30,
+                r
+            );
+
+        if (!isNaN(factor)) {
+
+            dades.push({
+                x: r / 1000,
+                y: factor
+            });
+
+        }
+
+    }
+
+    return dades;
+
+}
+
+
+/* ================================================= */
+/* GRÀFICA CINEMÀTICA */
+/* ================================================= */
+
+const graficaCinematic =
+    new Chart(
+        document.getElementById(
+            "graficaCinematic"
+        ),
+        {
+
+            type: "line",
+
+            data: {
+
+                datasets: [{
+
+                    label:
+                        "Dilatació temporal",
+
+                    data:
+                        generarDadesVelocitat(),
+
+                    parsing: false
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    x: {
+
+                        type: "linear",
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Velocitat (% de c)"
+
+                        }
+
+                    },
+
+                    y: {
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Factor de dilatació"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* ================================================= */
+/* GRÀFICA MASSA */
+/* ================================================= */
+
+const graficaMassa =
+    new Chart(
+        document.getElementById(
+            "graficaMassa"
+        ),
+        {
+
+            type: "line",
+
+            data: {
+
+                datasets: [{
+
+                    label:
+                        "Dilatació gravitacional",
+
+                    data:
+                        generarDadesMassa(),
+
+                    parsing: false
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    x: {
+
+                        type: "linear",
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Massa (10³⁰ kg)"
+
+                        }
+
+                    },
+
+                    y: {
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Factor de dilatació"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* ================================================= */
+/* GRÀFICA DISTÀNCIA */
+/* ================================================= */
+
+const graficaDistancia =
+    new Chart(
+        document.getElementById(
+            "graficaDistancia"
+        ),
+        {
+
+            type: "line",
+
+            data: {
+
+                datasets: [{
+
+                    label:
+                        "Dilatació gravitacional",
+
+                    data:
+                        generarDadesDistancia(),
+
+                    parsing: false
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    x: {
+
+                        type: "linear",
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Distància (km)"
+
+                        }
+
+                    },
+
+                    y: {
+
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Factor de dilatació"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* ================================================= */
+/* SLIDERS */
+/* ================================================= */
+
+sliderVelocitat.addEventListener(
+    "input",
+    actualitzarCinematic
+);
+
+sliderMassa.addEventListener(
+    "input",
+    actualitzarMassa
+);
+
+sliderDistancia.addEventListener(
+    "input",
+    actualitzarDistancia
+);
+
+
+/* ================================================= */
+/* INICIALITZACIÓ */
+/* ================================================= */
+
+actualitzarCinematic();
+
+actualitzarMassa();
+
+actualitzarDistancia();
+
+
+</script>
+
+</body>
+
+</html>
+```
+
