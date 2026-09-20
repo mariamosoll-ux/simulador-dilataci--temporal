@@ -1,1344 +1,313 @@
 <!DOCTYPE html>
 <html lang="ca">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Simulador de dilatació temporal</title>
 
+    <link rel="stylesheet" href="style.css">
+
+    <!-- MathJax per mostrar les equacions -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            }
+        };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Chart.js per a les gràfiques -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #061a2d;
-            color: white;
-            margin: 0;
-        }
-
-        header {
-            text-align: center;
-            padding: 70px 20px;
-            background-color: #082b4a;
-        }
-
-        h1 {
-            font-size: 45px;
-            margin-bottom: 20px;
-        }
-
-        header p {
-            max-width: 750px;
-            margin: auto;
-            color: #cfe2f3;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .boto {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 14px 28px;
-            border-radius: 8px;
-            background-color: #0b5394;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .boto:hover {
-            background-color: #3d85c6;
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .apartat {
-            background-color: #082b4a;
-            padding: 30px;
-            margin-bottom: 40px;
-            border-radius: 15px;
-        }
-
-        h2 {
-            color: #6fa8dc;
-            margin-top: 0;
-        }
-
-        h3 {
-            color: #9fc5e8;
-        }
-
-        .descripcio {
-            color: #cfe2f3;
-            line-height: 1.6;
-        }
-
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .control {
-            background-color: #061a2d;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .valor {
-            font-size: 20px;
-            font-weight: bold;
-            color: #9fc5e8;
-            margin-top: 10px;
-        }
-
-        .calculats {
-            background-color: #061a2d;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 25px;
-            line-height: 1.8;
-        }
-
-        .equacions {
-            background-color: #061a2d;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 25px;
-            line-height: 2;
-        }
-
-        .equacio {
-            text-align: center;
-            font-size: 21px;
-            margin: 15px 0;
-            font-family: "Times New Roman", serif;
-        }
-
-        .resultat {
-            background-color: #e8f1fa;
-            color: #082b4a;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        .resultat h3 {
-            color: #082b4a;
-            margin-top: 0;
-        }
-
-        .numero {
-            font-size: 32px;
-            font-weight: bold;
-            color: #0b5394;
-        }
-
-        .explicacio-resultat {
-            margin-top: 12px;
-            line-height: 1.5;
-        }
-
-        .grafica {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #9fc5e8;
-        }
-
-        @media (max-width: 750px) {
-
-            h1 {
-                font-size: 34px;
-            }
-
-            .controls {
-                grid-template-columns: 1fr;
-            }
-
-            .apartat {
-                padding: 22px;
-            }
-
-        }
-
-    </style>
-
 </head>
-
 
 <body>
 
-
 <header>
-
-    <h1>Simulador de dilatació temporal</h1>
-
-    <p>
-        Simulador interactiu per estudiar com la massa i el moviment
-        d'un objecte en òrbita poden modificar el pas del temps.
-    </p>
-
-    <a href="explicacio.html" class="boto">
-        Entén la dilatació temporal
-    </a>
-
+    <div class="header-content">
+        <h1>Simulador de dilatació temporal</h1>
+    </div>
 </header>
-
 
 <main>
 
+    <section class="intro">
+        <p>
+            Simulador interactiu de dilatació temporal desenvolupat com a part
+            pràctica d’un Treball de Recerca de Batxillerat sobre la relativitat
+            del temps en les proximitats d’un forat negre.
+        </p>
 
-<!-- ================================================= -->
-<!-- 1. DILATACIÓ TEMPORAL CINEMÀTICA -->
-<!-- ================================================= -->
-
-<section class="apartat">
-
-    <h2>Dilatació temporal cinemàtica</h2>
-
-    <p class="descripcio">
-
-        En aquest apartat s'estudia l'efecte de la velocitat orbital
-        sobre el pas del temps. Es poden modificar la massa del forat
-        negre i el període orbital de l'objecte.
-
-    </p>
+        <a class="main-button" href="explicacio.html">
+            Entén la dilatació temporal
+        </a>
+    </section>
 
 
-    <div class="controls">
+    <!-- ===================================================== -->
+    <!-- DILATACIÓ CINEMÀTICA -->
+    <!-- ===================================================== -->
 
+    <section class="simulator-card">
 
-        <div class="control">
+        <h2>Dilatació temporal cinemàtica</h2>
 
-            <label for="sliderMassa">
+        <p>
+            Aquesta part permet estudiar la dilatació temporal produïda pel
+            moviment de l’objecte que orbita al voltant del forat negre.
+        </p>
 
-                Massa del forat negre
+        <div class="controls">
 
-            </label>
+            <div class="control">
+                <label for="massKinematic">
+                    Massa del forat negre:
+                    <strong id="massKinematicValue"></strong>
+                </label>
 
-            <input
-                type="range"
-                id="sliderMassa"
-                min="1"
-                max="10"
-                step="0.1"
-                value="5"
-            >
+                <input
+                    type="range"
+                    id="massKinematic"
+                    min="1e30"
+                    max="1e39"
+                    step="1e36"
+                    value="3.4e38"
+                >
+            </div>
 
-            <div class="valor" id="valorMassa">
+            <div class="control">
+                <label for="period">
+                    Període orbital:
+                    <strong id="periodValue"></strong>
+                </label>
 
-                5,0 × 10³⁰ kg
-
+                <input
+                    type="range"
+                    id="period"
+                    min="100"
+                    max="100000000"
+                    step="100"
+                    value="1000000"
+                >
             </div>
 
         </div>
 
 
-        <div class="control">
+        <div class="results">
 
-            <label for="sliderPeriode">
+            <div class="result-box">
+                <span>Radi orbital</span>
+                <strong id="radiusResult"></strong>
+                <small>m</small>
+            </div>
 
-                Període orbital
+            <div class="result-box">
+                <span>Velocitat orbital</span>
+                <strong id="velocityResult"></strong>
+                <small>m/s</small>
+            </div>
 
-            </label>
+            <div class="result-box">
+                <span>Temps propi</span>
+                <strong>1 s</strong>
+            </div>
 
-            <input
-                type="range"
-                id="sliderPeriode"
-                min="100"
-                max="100000"
-                step="100"
-                value="10000"
-            >
-
-            <div class="valor" id="valorPeriode">
-
-                10.000 s
-
+            <div class="result-box">
+                <span>Temps impropi</span>
+                <strong id="kinematicTimeResult"></strong>
+                <small>s</small>
             </div>
 
         </div>
 
-    </div>
+
+        <div class="formula-section">
+
+            <h3>Model matemàtic</h3>
+
+            <p>
+                El radi orbital es determina a partir del període orbital
+                mitjançant:
+            </p>
+
+            \[
+            R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
+            \]
+
+            <p>
+                La velocitat orbital es calcula a partir del radi obtingut:
+            </p>
+
+            \[
+            v=\sqrt{\frac{GM}{R}}
+            \]
+
+            <p>
+                Finalment, la dilatació temporal cinemàtica es calcula amb:
+            </p>
+
+            \[
+            t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
+            \]
+
+            <p class="definition">
+                \(t_0\) és el <strong>temps propi</strong>, és a dir,
+                l’interval temporal mesurat per un rellotge en repòs respecte
+                de l’objecte. \(t\) és el <strong>temps impropi</strong>,
+                l’interval temporal mesurat pels rellotges del sistema de
+                referència en què l’objecte és mòbil amb velocitat \(v\)
+                constant.
+            </p>
+
+        </div>
 
 
-    <!-- MAGNITUDS CALCULADES -->
+        <div class="chart-container">
+            <canvas id="kinematicChart"></canvas>
+        </div>
 
-    <div class="calculats">
-
-        <strong>Magnituds calculades</strong>
-
-        <br><br>
-
-        Radi de l'òrbita:
-        <strong id="radiOrbital">--</strong>
-
-        <br>
-
-        Velocitat orbital:
-        <strong id="velocitatOrbital">--</strong>
-
-    </div>
+    </section>
 
 
-    <!-- EQUACIONS -->
 
-    <div class="equacions">
+    <!-- ===================================================== -->
+    <!-- DILATACIÓ GRAVITACIONAL -->
+    <!-- ===================================================== -->
 
-        <h3>Equacions utilitzades</h3>
+    <section class="simulator-card">
+
+        <h2>Dilatació temporal gravitacional</h2>
+
+        <p>
+            Aquesta part permet estudiar l’efecte del camp gravitatori del
+            forat negre sobre el pas del temps.
+        </p>
+
+        <div class="controls">
+
+            <div class="control">
+                <label for="massGravity">
+                    Massa del forat negre:
+                    <strong id="massGravityValue"></strong>
+                </label>
+
+                <input
+                    type="range"
+                    id="massGravity"
+                    min="1e30"
+                    max="1e39"
+                    step="1e36"
+                    value="3.4e38"
+                >
+            </div>
 
 
-        <div class="equacio">
+            <div class="control">
+                <label for="spin">
+                    Spin adimensional:
+                    <strong id="spinValue"></strong>
+                </label>
 
-            R = ∛(GMT² / 4π²)
+                <input
+                    type="range"
+                    id="spin"
+                    min="0"
+                    max="0.998"
+                    step="0.001"
+                    value="0.998"
+                >
+            </div>
 
         </div>
 
 
-        <div class="equacio">
+        <div class="results">
 
-            v = √(GM / R)
+            <div class="result-box">
+                <span>Radi considerat</span>
+                <strong id="gravityRadiusResult"></strong>
+                <small>m</small>
+            </div>
+
+            <div class="result-box">
+                <span>Temps propi</span>
+                <strong>1 s</strong>
+            </div>
+
+            <div class="result-box">
+                <span>Temps impropi</span>
+                <strong id="gravityTimeResult"></strong>
+                <small>s</small>
+            </div>
+
+            <div class="result-box">
+                <span>Dilatació temporal</span>
+                <strong id="gravityFactorResult"></strong>
+            </div>
+
+        </div>
+
+
+        <div class="formula-section">
+
+            <h3>Model matemàtic</h3>
+
+            <p>
+                Per tenir en compte la rotació del forat negre, es calcula
+                primer el radi gravitacional de Kerr:
+            </p>
+
+            \[
+            r_+=\frac{GM}{c^2}
+            \left(1+\sqrt{1-a^2}\right)
+            \]
+
+            <p>
+                A partir del model utilitzat, el temps propi i el temps
+                impropi es relacionen mitjançant:
+            </p>
+
+            \[
+            t_0=t\sqrt{1-\frac{2GM}{rc^2}}
+            \]
+
+            <p>
+                Equivalentment, el temps impropi es pot obtenir com:
+            </p>
+
+            \[
+            t=\frac{t_0}
+            {\sqrt{1-\frac{2GM}{rc^2}}}
+            \]
+
+            <p>
+                on \(G\) és la constant de gravitació universal, \(M\) la
+                massa del forat negre, \(r\) el radi considerat i \(c\) la
+                velocitat de la llum.
+            </p>
 
         </div>
 
 
-        <div class="equacio">
-
-            t = t₀ / √(1 − v²/c²)
-
+        <div class="chart-container">
+            <canvas id="gravityChart"></canvas>
         </div>
 
-    </div>
-
-
-    <!-- RESULTAT -->
-
-    <div class="resultat">
-
-        <h3>
-
-            Temps per a l'observador exterior
-
-        </h3>
-
-        <div class="numero" id="resultatCinematic">
-
-            --
-
-        </div>
-
-        <div class="explicacio-resultat"
-             id="explicacioCinematic">
-
-            --
-
-        </div>
-
-    </div>
-
-
-    <!-- GRÀFICA -->
-
-    <div class="grafica">
-
-        <canvas id="graficaCinematic"></canvas>
-
-    </div>
-
-</section>
-
-
-
-<!-- ================================================= -->
-<!-- 2. DILATACIÓ TEMPORAL GRAVITACIONAL -->
-<!-- ================================================= -->
-
-<section class="apartat">
-
-    <h2>Dilatació temporal gravitacional</h2>
-
-    <p class="descripcio">
-
-        En aquest apartat s'estudia l'efecte del camp gravitacional
-        sobre el pas del temps. La massa del forat negre es pot
-        modificar mitjançant la barra lliscant.
-
-    </p>
-
-
-    <div class="control">
-
-        <label for="sliderMassaGravitacional">
-
-            Massa del forat negre
-
-        </label>
-
-        <input
-            type="range"
-            id="sliderMassaGravitacional"
-            min="1"
-            max="10"
-            step="0.1"
-            value="5"
-        >
-
-        <div class="valor"
-             id="valorMassaGravitacional">
-
-            5,0 × 10³⁰ kg
-
-        </div>
-
-    </div>
-
-
-    <!-- MAGNITUDS -->
-
-    <div class="calculats">
-
-        <strong>Magnitud calculada</strong>
-
-        <br><br>
-
-        Radi utilitzat:
-        <strong id="radiGravitacional">--</strong>
-
-    </div>
-
-
-    <!-- EQUACIÓ -->
-
-    <div class="equacions">
-
-        <h3>Equació utilitzada</h3>
-
-        <div class="equacio">
-
-            t<sub>f</sub> =
-            t₀ / √(1 − 2GM / rc²)
-
-        </div>
-
-    </div>
-
-
-    <!-- RESULTAT -->
-
-    <div class="resultat">
-
-        <h3>
-
-            Temps per a l'observador exterior
-
-        </h3>
-
-        <div class="numero"
-             id="resultatGravitacional">
-
-            --
-
-        </div>
-
-        <div class="explicacio-resultat"
-             id="explicacioGravitacional">
-
-            --
-
-        </div>
-
-    </div>
-
-
-    <!-- GRÀFICA -->
-
-    <div class="grafica">
-
-        <canvas id="graficaGravitacional"></canvas>
-
-    </div>
-
-</section>
-
+    </section>
 
 </main>
 
 
 <footer>
-
-    Simulador desenvolupat com a part pràctica
-    d'un Treball de Recerca de Batxillerat.
-
+    <p>Simulador de dilatació temporal · Treball de Recerca</p>
 </footer>
 
 
-
-<script>
-
-
-/* ================================================= */
-/* CONSTANTS FÍSIQUES */
-/* ================================================= */
-
-const G = 6.67430e-11;
-
-const c = 3.00e8;
-
-
-/*
-    Temps propi inicial.
-
-    L'objecte experimenta 1 hora
-    de temps propi.
-*/
-
-const tempsPropi = 1;
-
-
-/* ================================================= */
-/* EQUACIONS DEL MODEL */
-/* ================================================= */
-
-
-/*
-    R = ∛(GMT² / 4π²)
-*/
-
-function calcularRadi(M, T) {
-
-    return Math.cbrt(
-
-        (G * M * T * T) /
-        (4 * Math.PI * Math.PI)
-
-    );
-
-}
-
-
-/*
-    v = √(GM / R)
-*/
-
-function calcularVelocitat(M, R) {
-
-    return Math.sqrt(
-
-        (G * M) / R
-
-    );
-
-}
-
-
-/*
-    t = t₀ / √(1 − v²/c²)
-*/
-
-function calcularTempsCinematic(v, t0) {
-
-    const terme =
-
-        1 -
-        (v * v) /
-        (c * c);
-
-
-    if (terme <= 0) {
-
-        return NaN;
-
-    }
-
-
-    return t0 / Math.sqrt(terme);
-
-}
-
-
-/*
-    tf = t₀ / √(1 − 2GM/rc²)
-*/
-
-function calcularTempsGravitacional(M, r, t0) {
-
-    const terme =
-
-        1 -
-        (2 * G * M) /
-        (r * c * c);
-
-
-    if (terme <= 0) {
-
-        return NaN;
-
-    }
-
-
-    return t0 / Math.sqrt(terme);
-
-}
-
-
-/* ================================================= */
-/* ELEMENTS CINEMÀTICS */
-/* ================================================= */
-
-const sliderMassa =
-
-    document.getElementById(
-        "sliderMassa"
-    );
-
-
-const sliderPeriode =
-
-    document.getElementById(
-        "sliderPeriode"
-    );
-
-
-const valorMassa =
-
-    document.getElementById(
-        "valorMassa"
-    );
-
-
-const valorPeriode =
-
-    document.getElementById(
-        "valorPeriode"
-    );
-
-
-const radiOrbital =
-
-    document.getElementById(
-        "radiOrbital"
-    );
-
-
-const velocitatOrbital =
-
-    document.getElementById(
-        "velocitatOrbital"
-    );
-
-
-const resultatCinematic =
-
-    document.getElementById(
-        "resultatCinematic"
-    );
-
-
-const explicacioCinematic =
-
-    document.getElementById(
-        "explicacioCinematic"
-    );
-
-
-/* ================================================= */
-/* ACTUALITZACIÓ CINEMÀTICA */
-/* ================================================= */
-
-function actualitzarCinematic() {
-
-
-    const massa =
-
-        parseFloat(
-            sliderMassa.value
-        ) * 1e30;
-
-
-    const periode =
-
-        parseFloat(
-            sliderPeriode.value
-        );
-
-
-    /* Radi */
-
-    const radi =
-
-        calcularRadi(
-            massa,
-            periode
-        );
-
-
-    /* Velocitat */
-
-    const velocitat =
-
-        calcularVelocitat(
-            massa,
-            radi
-        );
-
-
-    /* Temps impropi */
-
-    const tempsImprop =
-
-        calcularTempsCinematic(
-            velocitat,
-            tempsPropi
-        );
-
-
-    /* Mostrar massa */
-
-    valorMassa.textContent =
-
-        parseFloat(
-            sliderMassa.value
-        )
-        .toFixed(1)
-        .replace(".", ",")
-        + " × 10³⁰ kg";
-
-
-    /* Mostrar període */
-
-    valorPeriode.textContent =
-
-        periode.toLocaleString("ca-ES")
-        + " s";
-
-
-    /* Mostrar radi */
-
-    radiOrbital.textContent =
-
-        radi.toExponential(3)
-        + " m";
-
-
-    /* Mostrar velocitat en m/s */
-
-    velocitatOrbital.textContent =
-
-        velocitat.toExponential(3)
-        + " m/s";
-
-
-    /* Mostrar resultat */
-
-    if (isNaN(tempsImprop)) {
-
-        resultatCinematic.textContent =
-            "Fora del model";
-
-        explicacioCinematic.textContent =
-            "No s'ha pogut obtenir un resultat.";
-
-    }
-
-    else {
-
-        resultatCinematic.textContent =
-
-            tempsImprop
-            .toFixed(4)
-            .replace(".", ",")
-            + " h";
-
-
-        explicacioCinematic.textContent =
-
-            "Per a 1 hora de temps propi, "
-            + "l'observador exterior mesura "
-            + tempsImprop
-                .toFixed(4)
-                .replace(".", ",")
-            + " hores.";
-
-    }
-
-
-    /*
-        Actualitzar gràfica
-    */
-
-    actualitzarGraficaCinematic();
-
-}
-
-
-/* ================================================= */
-/* DADES GRÀFICA CINEMÀTICA */
-/* ================================================= */
-
-function generarDadesCinematic() {
-
-
-    const massa =
-
-        parseFloat(
-            sliderMassa.value
-        ) * 1e30;
-
-
-    const periode =
-
-        parseFloat(
-            sliderPeriode.value
-        );
-
-
-    const radi =
-
-        calcularRadi(
-            massa,
-            periode
-        );
-
-
-    const velocitat =
-
-        calcularVelocitat(
-            massa,
-            radi
-        );
-
-
-    const dades = [];
-
-
-    /*
-        Temps propi entre 0 i 1 hora.
-    */
-
-    for (
-        let t0 = 0;
-        t0 <= 1;
-        t0 += 0.02
-    ) {
-
-
-        const t =
-
-            calcularTempsCinematic(
-                velocitat,
-                t0
-            );
-
-
-        if (!isNaN(t)) {
-
-            dades.push({
-
-                x: t0,
-
-                y: t
-
-            });
-
-        }
-
-    }
-
-
-    return dades;
-
-}
-
-
-/* ================================================= */
-/* CREAR GRÀFICA CINEMÀTICA */
-/* ================================================= */
-
-const graficaCinematic =
-
-    new Chart(
-
-        document.getElementById(
-            "graficaCinematic"
-        ),
-
-        {
-
-            type: "line",
-
-            data: {
-
-                datasets: [{
-
-                    label:
-                        "Temps propi i temps impropi",
-
-                    data:
-                        generarDadesCinematic(),
-
-                    parsing: false,
-
-                    borderWidth: 2,
-
-                    pointRadius: 0
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                scales: {
-
-                    x: {
-
-                        type: "linear",
-
-                        min: 0,
-
-                        max: 1,
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps propi (h)"
-
-                        }
-
-                    },
-
-                    y: {
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps impropi (h)"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    );
-
-
-/* Actualitzar gràfica */
-
-function actualitzarGraficaCinematic() {
-
-    graficaCinematic
-        .data
-        .datasets[0]
-        .data =
-        generarDadesCinematic();
-
-    graficaCinematic.update();
-
-}
-
-
-/* ================================================= */
-/* ELEMENTS GRAVITACIONALS */
-/* ================================================= */
-
-const sliderMassaGravitacional =
-
-    document.getElementById(
-        "sliderMassaGravitacional"
-    );
-
-
-const valorMassaGravitacional =
-
-    document.getElementById(
-        "valorMassaGravitacional"
-    );
-
-
-const radiGravitacional =
-
-    document.getElementById(
-        "radiGravitacional"
-    );
-
-
-const resultatGravitacional =
-
-    document.getElementById(
-        "resultatGravitacional"
-    );
-
-
-const explicacioGravitacional =
-
-    document.getElementById(
-        "explicacioGravitacional"
-    );
-
-
-/* ================================================= */
-/* ACTUALITZACIÓ GRAVITACIONAL */
-/* ================================================= */
-
-function actualitzarGravitacional() {
-
-
-    const massa =
-
-        parseFloat(
-            sliderMassaGravitacional.value
-        ) * 1e30;
-
-
-    /*
-        Per mantenir el model matemàtic
-        del TDR, el radi és el radi
-        orbital calculat amb el mateix
-        període de referència.
-    */
-
-    const periode =
-
-        parseFloat(
-            sliderPeriode.value
-        );
-
-
-    const radi =
-
-        calcularRadi(
-            massa,
-            periode
-        );
-
-
-    const tempsImprop =
-
-        calcularTempsGravitacional(
-            massa,
-            radi,
-            tempsPropi
-        );
-
-
-    valorMassaGravitacional.textContent =
-
-        parseFloat(
-            sliderMassaGravitacional.value
-        )
-        .toFixed(1)
-        .replace(".", ",")
-        + " × 10³⁰ kg";
-
-
-    radiGravitacional.textContent =
-
-        radi.toExponential(3)
-        + " m";
-
-
-    if (isNaN(tempsImprop)) {
-
-        resultatGravitacional.textContent =
-            "Fora del model";
-
-        explicacioGravitacional.textContent =
-            "No s'ha pogut obtenir un resultat.";
-
-    }
-
-    else {
-
-        resultatGravitacional.textContent =
-
-            tempsImprop
-            .toFixed(4)
-            .replace(".", ",")
-            + " h";
-
-
-        explicacioGravitacional.textContent =
-
-            "Per a 1 hora de temps propi, "
-            + "l'observador exterior mesura "
-            + tempsImprop
-                .toFixed(4)
-                .replace(".", ",")
-            + " hores.";
-
-    }
-
-
-    actualitzarGraficaGravitacional();
-
-}
-
-
-/* ================================================= */
-/* DADES GRÀFICA GRAVITACIONAL */
-/* ================================================= */
-
-function generarDadesGravitacional() {
-
-
-    const massa =
-
-        parseFloat(
-            sliderMassaGravitacional.value
-        ) * 1e30;
-
-
-    const periode =
-
-        parseFloat(
-            sliderPeriode.value
-        );
-
-
-    const radi =
-
-        calcularRadi(
-            massa,
-            periode
-        );
-
-
-    const dades = [];
-
-
-    for (
-        let t0 = 0;
-        t0 <= 1;
-        t0 += 0.02
-    ) {
-
-
-        const t =
-
-            calcularTempsGravitacional(
-                massa,
-                radi,
-                t0
-            );
-
-
-        if (!isNaN(t)) {
-
-            dades.push({
-
-                x: t0,
-
-                y: t
-
-            });
-
-        }
-
-    }
-
-
-    return dades;
-
-}
-
-
-/* ================================================= */
-/* CREAR GRÀFICA GRAVITACIONAL */
-/* ================================================= */
-
-const graficaGravitacional =
-
-    new Chart(
-
-        document.getElementById(
-            "graficaGravitacional"
-        ),
-
-        {
-
-            type: "line",
-
-            data: {
-
-                datasets: [{
-
-                    label:
-                        "Temps propi i temps impropi",
-
-                    data:
-                        generarDadesGravitacional(),
-
-                    parsing: false,
-
-                    borderWidth: 2,
-
-                    pointRadius: 0
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                scales: {
-
-                    x: {
-
-                        type: "linear",
-
-                        min: 0,
-
-                        max: 1,
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps propi (h)"
-
-                        }
-
-                    },
-
-                    y: {
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps impropi (h)"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    );
-
-
-/* Actualitzar gràfica */
-
-function actualitzarGraficaGravitacional() {
-
-    graficaGravitacional
-        .data
-        .datasets[0]
-        .data =
-        generarDadesGravitacional();
-
-    graficaGravitacional.update();
-
-}
-
-
-/* ================================================= */
-/* SLIDERS */
-/* ================================================= */
-
-
-/*
-    Cinemàtica:
-    massa + període
-*/
-
-sliderMassa.addEventListener(
-    "input",
-    actualitzarCinematic
-);
-
-sliderPeriode.addEventListener(
-    "input",
-    actualitzarCinematic
-);
-
-
-/*
-    Gravitacional:
-    massa
-*/
-
-sliderMassaGravitacional.addEventListener(
-    "input",
-    actualitzarGravitacional
-);
-
-
-/*
-    Quan canvia el període,
-    també actualitzem el bloc
-    gravitacional perquè el radi
-    utilitzat en el model canvia.
-*/
-
-sliderPeriode.addEventListener(
-    "input",
-    actualitzarGravitacional
-);
-
-
-/* ================================================= */
-/* INICIALITZACIÓ */
-/* ================================================= */
-
-actualitzarCinematic();
-
-actualitzarGravitacional();
-
-
-</script>
-
+<script src="script.js"></script>
 
 </body>
-
 </html>
