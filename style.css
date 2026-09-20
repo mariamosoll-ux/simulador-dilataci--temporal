@@ -1,68 +1,69 @@
 * {
+
     box-sizing: border-box;
+
 }
 
 
 body {
 
-    margin: 0;
-
     font-family: Arial, sans-serif;
 
-    background-color: #f5f7fa;
-
-    color: #222;
-
-    line-height: 1.6;
-
-}
-
-
-/* =====================================================
-   CAPÇALERA
-===================================================== */
-
-header {
-
-    background-color: #0b5394;
+    background-color: #061a2d;
 
     color: white;
 
-    padding: 30px 20px;
-
-}
-
-
-.header-content {
-
-    max-width: 1100px;
-
-    margin: auto;
-
-}
-
-
-header h1 {
-
     margin: 0;
 
-    font-size: 30px;
+    padding: 0;
 
 }
 
 
+.contenidor {
 
-/* =====================================================
-   CONTINGUT
-===================================================== */
+    max-width: 1000px;
 
-main {
+    margin: 50px auto;
 
-    max-width: 1100px;
+    padding: 40px;
 
-    margin: 35px auto;
+    background-color: #082b4a;
 
-    padding: 0 20px;
+    border-radius: 15px;
+
+}
+
+
+h1 {
+
+    color: white;
+
+    text-align: center;
+
+    margin-top: 0;
+
+    margin-bottom: 35px;
+
+}
+
+
+h2 {
+
+    color: #6fa8dc;
+
+    margin-top: 35px;
+
+}
+
+
+p {
+
+    color: #cfe2f3;
+
+    font-size: 17px;
+
+    line-height: 1.7;
 
 }
 
@@ -72,48 +73,42 @@ main {
    INTRODUCCIÓ
 ===================================================== */
 
-.intro {
+.introduccio {
 
-    background-color: white;
-
-    padding: 30px;
-
-    border-radius: 12px;
-
-    border-left: 6px solid #0b5394;
-
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 
 }
 
 
-.intro p {
+.introduccio p {
 
-    margin-top: 0;
-
-    font-size: 17px;
+    margin-bottom: 25px;
 
 }
 
 
 
 /* =====================================================
-   BOTONS
+   BOTÓ
 ===================================================== */
 
-.main-button {
+.boto {
 
-    display: inline-block;
+    display: block;
+
+    width: fit-content;
+
+    margin: 25px auto 0;
+
+    padding: 14px 28px;
+
+    border-radius: 8px;
 
     background-color: #0b5394;
 
     color: white;
 
     text-decoration: none;
-
-    padding: 12px 22px;
-
-    border-radius: 7px;
 
     font-weight: bold;
 
@@ -122,45 +117,9 @@ main {
 }
 
 
-.main-button:hover {
+.boto:hover {
 
-    background-color: #073763;
-
-}
-
-
-
-/* =====================================================
-   TARGETES
-===================================================== */
-
-.simulator-card {
-
-    background-color: white;
-
-    padding: 30px;
-
-    border-radius: 12px;
-
-    margin-bottom: 30px;
-
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-
-}
-
-
-.simulator-card h2 {
-
-    color: #0b5394;
-
-    margin-top: 0;
-
-}
-
-
-.simulator-card h3 {
-
-    color: #073763;
+    background-color: #3d85c6;
 
 }
 
@@ -176,22 +135,20 @@ main {
 
     grid-template-columns: 1fr 1fr;
 
-    gap: 25px;
+    gap: 20px;
 
-    margin: 30px 0;
+    margin-top: 25px;
 
 }
 
 
 .control {
 
+    background-color: #061f35;
+
     padding: 20px;
 
-    background-color: #f7f9fb;
-
-    border: 1px solid #d6dce2;
-
-    border-radius: 8px;
+    border-radius: 10px;
 
 }
 
@@ -200,16 +157,24 @@ main {
 
     display: block;
 
-    margin-bottom: 12px;
+    color: #cfe2f3;
+
+    font-size: 16px;
 
     font-weight: bold;
+
+    margin-bottom: 10px;
 
 }
 
 
-.control strong {
+.valor-control {
 
-    color: #0b5394;
+    color: #9fc5e8;
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
 
 }
 
@@ -227,60 +192,82 @@ input[type="range"] {
 
 
 /* =====================================================
+   APARTATS
+===================================================== */
+
+.apartat {
+
+    margin-top: 45px;
+
+    padding-top: 10px;
+
+}
+
+
+
+/* =====================================================
    RESULTATS
 ===================================================== */
 
-.results {
+.resultats {
 
     display: grid;
 
     grid-template-columns: repeat(4, 1fr);
 
-    gap: 15px;
+    gap: 12px;
 
-    margin: 25px 0;
+    margin-top: 25px;
 
 }
 
 
-.result-box {
+.resultat {
 
-    background-color: #d9eaf7;
+    background-color: #e8f1fa;
 
-    border-radius: 8px;
+    color: #0b5394;
 
-    padding: 18px;
+    padding: 15px 10px;
+
+    border-radius: 10px;
 
     text-align: center;
 
+    min-height: 100px;
+
 }
 
 
-.result-box span {
+.resultat span {
 
     display: block;
 
     font-size: 14px;
 
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 
 }
 
 
-.result-box strong {
+.resultat strong {
 
     display: block;
 
-    color: #073763;
+    font-size: 18px;
 
-    font-size: 17px;
+    word-break: break-word;
 
 }
 
 
-.result-box small {
+.resultat small {
 
-    color: #444;
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 13px;
 
 }
 
@@ -290,24 +277,24 @@ input[type="range"] {
    EQUACIONS
 ===================================================== */
 
-.formula-section {
+.equacions {
 
-    border-top: 1px solid #d6dce2;
+    color: #9fc5e8;
 
-    margin-top: 30px;
+    font-size: 0.85rem;
 
-    padding-top: 25px;
+    text-align: center;
+
+    margin-top: 12px;
+
+    opacity: 0.9;
 
 }
 
 
-.equation {
+.equacions mjx-container {
 
-    text-align: center;
-
-    font-size: 1.2rem;
-
-    margin: 20px 0;
+    margin: 8px 0 !important;
 
 }
 
@@ -317,33 +304,21 @@ input[type="range"] {
    GRÀFIQUES
 ===================================================== */
 
-.chart-container {
+.grafica {
 
     position: relative;
 
+    width: 100%;
+
     height: 350px;
 
-    margin-top: 30px;
+    margin-top: 25px;
 
-}
+    background-color: #061f35;
 
+    padding: 15px;
 
-
-/* =====================================================
-   PEU
-===================================================== */
-
-footer {
-
-    background-color: #073763;
-
-    color: white;
-
-    text-align: center;
-
-    padding: 20px;
-
-    margin-top: 50px;
+    border-radius: 10px;
 
 }
 
@@ -355,6 +330,15 @@ footer {
 
 @media (max-width: 800px) {
 
+    .contenidor {
+
+        margin: 25px 15px;
+
+        padding: 25px;
+
+    }
+
+
     .controls {
 
         grid-template-columns: 1fr;
@@ -362,7 +346,7 @@ footer {
     }
 
 
-    .results {
+    .resultats {
 
         grid-template-columns: 1fr 1fr;
 
@@ -373,24 +357,9 @@ footer {
 
 @media (max-width: 500px) {
 
-    .results {
+    .resultats {
 
         grid-template-columns: 1fr;
-
-    }
-
-
-    header h1 {
-
-        font-size: 24px;
-
-    }
-
-
-    .simulator-card,
-    .intro {
-
-        padding: 20px;
 
     }
 
