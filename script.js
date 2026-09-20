@@ -9,143 +9,138 @@ const c = 299792458;
 
 
 /* =====================================================
-   ELEMENTS CINEMÀTICS
+   ELEMENTS HTML
 ===================================================== */
 
-const massKinematic =
-    document.getElementById("massKinematic");
+const massa =
+    document.getElementById("massa");
 
-const period =
-    document.getElementById("period");
-
-
-const massKinematicValue =
-    document.getElementById("massKinematicValue");
-
-const periodValue =
-    document.getElementById("periodValue");
+const periode =
+    document.getElementById("periode");
 
 
-const radiusResult =
-    document.getElementById("radiusResult");
+const massaValor =
+    document.getElementById("massaValor");
 
-const velocityResult =
-    document.getElementById("velocityResult");
+const periodeValor =
+    document.getElementById("periodeValor");
 
-const kinematicTimeResult =
-    document.getElementById("kinematicTimeResult");
+
+const radi =
+    document.getElementById("radi");
+
+const velocitat =
+    document.getElementById("velocitat");
+
+const tempsCinematic =
+    document.getElementById("tempsCinematic");
+
+
+const radiGravitacional =
+    document.getElementById("radiGravitacional");
+
+const tempsGravitacional =
+    document.getElementById("tempsGravitacional");
+
+const factorGravitacional =
+    document.getElementById("factorGravitacional");
 
 
 
 /* =====================================================
-   ELEMENTS GRAVITACIONALS
+   GRÀFIQUES
 ===================================================== */
 
-const massGravity =
-    document.getElementById("massGravity");
+let chartCinematic = null;
 
-const spin =
-    document.getElementById("spin");
-
-
-const massGravityValue =
-    document.getElementById("massGravityValue");
-
-const spinValue =
-    document.getElementById("spinValue");
-
-
-const gravityRadiusResult =
-    document.getElementById("gravityRadiusResult");
-
-const gravityTimeResult =
-    document.getElementById("gravityTimeResult");
-
-const gravityFactorResult =
-    document.getElementById("gravityFactorResult");
+let chartGravitacional = null;
 
 
 
 /* =====================================================
-   FUNCIONS DE FORMAT
+   FORMAT DELS NÚMEROS
 ===================================================== */
 
-function scientific(value, digits = 3) {
+function formatScientific(valor, decimals = 3) {
 
-    if (!isFinite(value)) {
+    if (!Number.isFinite(valor)) {
 
         return "—";
 
     }
 
-    return value.toExponential(digits);
+    return valor.toExponential(decimals);
 
 }
 
 
 
-function formatMass(value) {
+function formatMassa(valor) {
 
-    const solarMasses =
-        value / 1.989e30;
+    const massesSolars =
+        valor / 1.989e30;
 
     return (
-        value.toExponential(3) +
-        " kg (" +
-        solarMasses.toFixed(2) +
-        " M☉)"
+        valor.toExponential(3) +
+        " kg"
     );
 
 }
 
 
 
-function formatNumber(value, digits = 2) {
+function formatPeriode(valor) {
 
-    return value.toLocaleString(
-        "ca-ES",
-        {
-            maximumFractionDigits: digits
-        }
-    );
+    return valor.toLocaleString(
+        "ca-ES"
+    ) + " s";
 
 }
 
 
 
 /* =====================================================
-   CÀLCUL CINEMÀTIC
+   CÀLCUL GENERAL
 ===================================================== */
 
-function calculateKinematic() {
+function calcular() {
 
     const M =
-        Number(massKinematic.value);
+        Number(massa.value);
 
     const T =
-        Number(period.value);
+        Number(periode.value);
 
 
 
-    /*
+    /* =================================================
+       RADI ORBITAL
 
-        R = ∛(GMT² / 4π²)
-
-    */
+       R = ∛(GMT² / 4π²)
+    ================================================= */
 
     const R =
         Math.cbrt(
-            (G * M * T * T) /
-            (4 * Math.PI * Math.PI)
+            (
+                G *
+                M *
+                T *
+                T
+            ) /
+            (
+                4 *
+                Math.PI *
+                Math.PI
+            )
         );
 
 
 
-    /*
+    /* =================================================
+       VELOCITAT ORBITAL
 
-        v = √(GM/R)
-
-    */
+       v = √(GM/R)
+    ================================================= */
 
     const v =
         Math.sqrt(
@@ -154,69 +149,139 @@ function calculateKinematic() {
 
 
 
-    /*
+    /* =================================================
+       DILATACIÓ CINEMÀTICA
 
-        t = t0 / √(1-v²/c²)
+       t = t0 / √(1-v²/c²)
 
-        t0 = 1 s
+       t0 = 1 s
+    ================================================= */
 
-    */
-
-    const factor =
+    const termeCinematic =
         1 -
-        (v * v) /
-        (c * c);
+        (
+            (v * v) /
+            (c * c)
+        );
 
 
-    let t;
+    let tCinematic;
 
 
-    if (factor > 0) {
+    if (termeCinematic > 0) {
 
-        t =
+        tCinematic =
             1 /
-            Math.sqrt(factor);
+            Math.sqrt(
+                termeCinematic
+            );
 
     } else {
 
-        t = Infinity;
+        tCinematic = Infinity;
 
     }
 
 
 
     /* =================================================
-       ACTUALITZAR RESULTATS
+       DILATACIÓ GRAVITACIONAL
+
+       S'utilitza el mateix radi orbital R.
+
+       t = t0 / √(1 - 2GM/Rc²)
+
+       t0 = 1 s
     ================================================= */
 
-    massKinematicValue.textContent =
-        formatMass(M);
+    const termeGravitacional =
+        1 -
+        (
+            (2 * G * M) /
+            (
+                R *
+                c *
+                c
+            )
+        );
 
 
-    periodValue.textContent =
-        formatNumber(T) + " s";
+    let tGravitacional;
 
 
-    radiusResult.textContent =
-        scientific(R);
+    if (termeGravitacional > 0) {
+
+        tGravitacional =
+            1 /
+            Math.sqrt(
+                termeGravitacional
+            );
+
+    } else {
+
+        tGravitacional = Infinity;
+
+    }
 
 
-    velocityResult.textContent =
-        scientific(v);
+
+    /* =================================================
+       ACTUALITZAR TEXTOS
+    ================================================= */
+
+    massaValor.textContent =
+        formatMassa(M);
 
 
-    kinematicTimeResult.textContent =
-        isFinite(t)
-            ? t.toFixed(9)
+    periodeValor.textContent =
+        formatPeriode(T);
+
+
+    radi.textContent =
+        formatScientific(R);
+
+
+    velocitat.textContent =
+        formatScientific(v);
+
+
+    tempsCinematic.textContent =
+        Number.isFinite(tCinematic)
+            ? tCinematic.toFixed(9)
+            : "No definit";
+
+
+    radiGravitacional.textContent =
+        formatScientific(R);
+
+
+    tempsGravitacional.textContent =
+        Number.isFinite(tGravitacional)
+            ? tGravitacional.toFixed(9)
+            : "No definit";
+
+
+    factorGravitacional.textContent =
+        Number.isFinite(tGravitacional)
+            ? tGravitacional.toFixed(6)
             : "No definit";
 
 
 
     /* =================================================
-       ACTUALITZAR GRÀFICA
+       ACTUALITZAR GRÀFIQUES
     ================================================= */
 
-    updateKinematicChart(M, T);
+    actualitzarGraficaCinematic(
+        M,
+        T
+    );
+
+
+    actualitzarGraficaGravitacional(
+        M,
+        T
+    );
 
 }
 
@@ -226,49 +291,65 @@ function calculateKinematic() {
    GRÀFICA CINEMÀTICA
 ===================================================== */
 
-let kinematicChart = null;
+function actualitzarGraficaCinematic(
+    M,
+    periodeActual
+) {
 
+    const periodes = [];
 
-
-function updateKinematicChart(M, selectedPeriod) {
-
-    const periods = [];
-
-    const times = [];
+    const temps = [];
 
 
 
     /*
-        Es creen diferents períodes al voltant
-        del valor seleccionat.
+        La gràfica mostra com varia
+        el temps impropi en funció
+        del període orbital.
+
+        El període seleccionat queda
+        dins de la gràfica.
     */
 
-    const minimum =
+    const minim =
         Math.max(
-            1,
-            selectedPeriod / 10
+            1000,
+            periodeActual / 10
         );
 
 
-    const maximum =
-        selectedPeriod * 10;
+    const maxim =
+        periodeActual * 10;
 
 
 
-    for (let i = 0; i < 40; i++) {
+    for (
+        let i = 0;
+        i < 50;
+        i++
+    ) {
 
         const T =
-            minimum *
+            minim *
             Math.pow(
-                maximum / minimum,
-                i / 39
+                maxim / minim,
+                i / 49
             );
 
 
         const R =
             Math.cbrt(
-                (G * M * T * T) /
-                (4 * Math.PI * Math.PI)
+                (
+                    G *
+                    M *
+                    T *
+                    T
+                ) /
+                (
+                    4 *
+                    Math.PI *
+                    Math.PI
+                )
             );
 
 
@@ -278,86 +359,97 @@ function updateKinematicChart(M, selectedPeriod) {
             );
 
 
-        const factor =
+        const terme =
             1 -
-            (v * v) /
-            (c * c);
+            (
+                (v * v) /
+                (c * c)
+            );
 
 
         const t =
-            factor > 0
-                ? 1 / Math.sqrt(factor)
+            terme > 0
+                ? 1 / Math.sqrt(terme)
                 : null;
 
 
-        periods.push(T);
+        periodes.push(T);
 
-        times.push(t);
+        temps.push(t);
 
     }
 
 
 
     /*
-        Punt que correspon al valor actual
+        Buscar el punt corresponent
+        al període actual.
     */
 
-    const selectedIndex =
-        times.reduce(
-            (closest, value, index) => {
+    let indexActual = 0;
 
-                if (
-                    value === null ||
-                    times[closest] === null
-                ) {
-
-                    return closest;
-
-                }
-
-                return Math.abs(
-                    periods[index] - selectedPeriod
-                ) <
-                Math.abs(
-                    periods[closest] - selectedPeriod
-                )
-                    ? index
-                    : closest;
-
-            },
-            0
-        );
+    let diferenciaMinima =
+        Infinity;
 
 
+    for (
+        let i = 0;
+        i < periodes.length;
+        i++
+    ) {
 
-    /*
-        Destruir la gràfica anterior
-        i crear-ne una de nova.
-    */
+        const diferencia =
+            Math.abs(
+                periodes[i] -
+                periodeActual
+            );
 
-    if (kinematicChart !== null) {
 
-        kinematicChart.destroy();
+        if (
+            diferencia <
+            diferenciaMinima
+        ) {
+
+            diferenciaMinima =
+                diferencia;
+
+            indexActual = i;
+
+        }
 
     }
 
 
 
-    kinematicChart =
+    /*
+        Crear la gràfica.
+    */
+
+    if (chartCinematic !== null) {
+
+        chartCinematic.destroy();
+
+    }
+
+
+    chartCinematic =
         new Chart(
             document.getElementById(
-                "kinematicChart"
+                "graficaCinematic"
             ),
             {
 
                 type: "line",
 
+
                 data: {
 
-                    labels: periods.map(
-                        value =>
-                            value.toExponential(1)
-                    ),
+                    labels:
+                        periodes.map(
+                            valor =>
+                                valor.toExponential(1)
+                        ),
+
 
                     datasets: [
 
@@ -366,17 +458,17 @@ function updateKinematicChart(M, selectedPeriod) {
                             label:
                                 "Temps impropi t (s)",
 
-                            data: times,
+                            data: temps,
 
                             borderWidth: 2,
 
-                            tension: 0.2,
+                            tension: 0.25,
 
                             pointRadius:
-                                periods.map(
+                                periodes.map(
                                     (_, index) =>
-                                        index === selectedIndex
-                                            ? 6
+                                        index === indexActual
+                                            ? 7
                                             : 2
                                 )
 
@@ -387,7 +479,6 @@ function updateKinematicChart(M, selectedPeriod) {
                 },
 
 
-
                 options: {
 
                     responsive: true,
@@ -395,47 +486,87 @@ function updateKinematicChart(M, selectedPeriod) {
                     maintainAspectRatio: false,
 
 
-
                     plugins: {
 
-                        title: {
+                        legend: {
 
-                            display: true,
+                            labels: {
 
-                            text:
-                                "Dilatació temporal cinemàtica"
-
-                        }
-
-                    },
-
-
-
-                    scales: {
-
-                        x: {
-
-                            title: {
-
-                                display: true,
-
-                                text:
-                                    "Període orbital T (s)"
+                                color: "#cfe2f3"
 
                             }
 
                         },
 
 
+                        title: {
 
-                        y: {
+                            display: true,
+
+                            text:
+                                "Dilatació temporal cinemàtica",
+
+                            color: "#cfe2f3"
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            ticks: {
+
+                                color: "#cfe2f3"
+
+                            },
 
                             title: {
 
                                 display: true,
 
                                 text:
-                                    "Temps impropi t (s)"
+                                    "Període orbital T (s)",
+
+                                color: "#cfe2f3"
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(207,226,243,0.15)"
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            ticks: {
+
+                                color: "#cfe2f3"
+
+                            },
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Temps impropi t (s)",
+
+                                color: "#cfe2f3"
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -447,111 +578,6 @@ function updateKinematicChart(M, selectedPeriod) {
 
             }
         );
-
-}
-
-
-
-/* =====================================================
-   CÀLCUL GRAVITACIONAL
-===================================================== */
-
-function calculateGravity() {
-
-    const M =
-        Number(massGravity.value);
-
-    const a =
-        Number(spin.value);
-
-
-
-    /*
-
-        Radi considerat:
-
-        r = GM/c² · (1 + √(1-a²))
-
-    */
-
-    const r =
-        (G * M / (c * c)) *
-        (
-            1 +
-            Math.sqrt(
-                1 - a * a
-            )
-        );
-
-
-
-    /*
-
-        Dilatació temporal:
-
-        t = t0 / √(1 - 2GM/rc²)
-
-        t0 = 1 s
-
-    */
-
-    const factor =
-        1 -
-        (2 * G * M) /
-        (r * c * c);
-
-
-    let t;
-
-
-    if (factor > 0) {
-
-        t =
-            1 /
-            Math.sqrt(factor);
-
-    } else {
-
-        t = Infinity;
-
-    }
-
-
-
-    /* =================================================
-       ACTUALITZAR RESULTATS
-    ================================================= */
-
-    massGravityValue.textContent =
-        formatMass(M);
-
-
-    spinValue.textContent =
-        a.toFixed(3);
-
-
-    gravityRadiusResult.textContent =
-        scientific(r);
-
-
-    gravityTimeResult.textContent =
-        isFinite(t)
-            ? t.toFixed(9)
-            : "No definit";
-
-
-    gravityFactorResult.textContent =
-        isFinite(t)
-            ? t.toFixed(6)
-            : "No definit";
-
-
-
-    /* =================================================
-       ACTUALITZAR GRÀFICA
-    ================================================= */
-
-    updateGravityChart(M, a);
 
 }
 
@@ -561,83 +587,125 @@ function calculateGravity() {
    GRÀFICA GRAVITACIONAL
 ===================================================== */
 
-let gravityChart = null;
+function actualitzarGraficaGravitacional(
+    M,
+    periodeActual
+) {
+
+    const periodes = [];
+
+    const temps = [];
 
 
 
-function updateGravityChart(M, selectedSpin) {
-
-    const spins = [];
-
-    const times = [];
-
-
-
-    for (let i = 0; i <= 50; i++) {
-
-        const a =
-            i / 50 * 0.998;
+    const minim =
+        Math.max(
+            1000,
+            periodeActual / 10
+        );
 
 
-        const r =
-            (G * M / (c * c)) *
-            (
-                1 +
-                Math.sqrt(
-                    1 - a * a
+    const maxim =
+        periodeActual * 10;
+
+
+
+    /*
+        Es calcula la dilatació gravitacional
+        per diferents períodes.
+
+        El radi es torna a obtenir a partir
+        de cada període.
+    */
+
+    for (
+        let i = 0;
+        i < 50;
+        i++
+    ) {
+
+        const T =
+            minim *
+            Math.pow(
+                maxim / minim,
+                i / 49
+            );
+
+
+        const R =
+            Math.cbrt(
+                (
+                    G *
+                    M *
+                    T *
+                    T
+                ) /
+                (
+                    4 *
+                    Math.PI *
+                    Math.PI
                 )
             );
 
 
-        const factor =
+        const terme =
             1 -
-            (2 * G * M) /
-            (r * c * c);
+            (
+                (2 * G * M) /
+                (
+                    R *
+                    c *
+                    c
+                )
+            );
 
 
         const t =
-            factor > 0
-                ? 1 / Math.sqrt(factor)
+            terme > 0
+                ? 1 / Math.sqrt(terme)
                 : null;
 
 
-        spins.push(a);
+        periodes.push(T);
 
-        times.push(t);
+        temps.push(t);
 
     }
 
 
 
     /*
-        Buscar el punt més proper
-        a l'spin seleccionat.
+        Buscar el punt actual.
     */
 
-    let selectedIndex = 0;
+    let indexActual = 0;
 
-    let smallestDifference =
+    let diferenciaMinima =
         Infinity;
 
 
-    for (let i = 0; i < spins.length; i++) {
+    for (
+        let i = 0;
+        i < periodes.length;
+        i++
+    ) {
 
-        const difference =
+        const diferencia =
             Math.abs(
-                spins[i] -
-                selectedSpin
+                periodes[i] -
+                periodeActual
             );
 
 
         if (
-            difference <
-            smallestDifference
+            diferencia <
+            diferenciaMinima
         ) {
 
-            smallestDifference =
-                difference;
+            diferenciaMinima =
+                diferencia;
 
-            selectedIndex = i;
+            indexActual = i;
 
         }
 
@@ -646,21 +714,20 @@ function updateGravityChart(M, selectedSpin) {
 
 
     /*
-        Destruir la gràfica anterior.
+        Crear la gràfica.
     */
 
-    if (gravityChart !== null) {
+    if (chartGravitacional !== null) {
 
-        gravityChart.destroy();
+        chartGravitacional.destroy();
 
     }
 
 
-
-    gravityChart =
+    chartGravitacional =
         new Chart(
             document.getElementById(
-                "gravityChart"
+                "graficaGravitacional"
             ),
             {
 
@@ -669,10 +736,11 @@ function updateGravityChart(M, selectedSpin) {
 
                 data: {
 
-                    labels: spins.map(
-                        value =>
-                            value.toFixed(2)
-                    ),
+                    labels:
+                        periodes.map(
+                            valor =>
+                                valor.toExponential(1)
+                        ),
 
 
                     datasets: [
@@ -682,17 +750,17 @@ function updateGravityChart(M, selectedSpin) {
                             label:
                                 "Temps impropi t (s)",
 
-                            data: times,
+                            data: temps,
 
                             borderWidth: 2,
 
-                            tension: 0.2,
+                            tension: 0.25,
 
                             pointRadius:
-                                spins.map(
+                                periodes.map(
                                     (_, index) =>
-                                        index === selectedIndex
-                                            ? 6
+                                        index === indexActual
+                                            ? 7
                                             : 2
                                 )
 
@@ -701,7 +769,6 @@ function updateGravityChart(M, selectedSpin) {
                     ]
 
                 },
-
 
 
                 options: {
@@ -713,12 +780,25 @@ function updateGravityChart(M, selectedSpin) {
 
                     plugins: {
 
+                        legend: {
+
+                            labels: {
+
+                                color: "#cfe2f3"
+
+                            }
+
+                        },
+
+
                         title: {
 
                             display: true,
 
                             text:
-                                "Dilatació temporal gravitacional"
+                                "Dilatació temporal gravitacional",
+
+                            color: "#cfe2f3"
 
                         }
 
@@ -729,12 +809,27 @@ function updateGravityChart(M, selectedSpin) {
 
                         x: {
 
+                            ticks: {
+
+                                color: "#cfe2f3"
+
+                            },
+
                             title: {
 
                                 display: true,
 
                                 text:
-                                    "Spin adimensional"
+                                    "Període orbital T (s)",
+
+                                color: "#cfe2f3"
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -743,12 +838,27 @@ function updateGravityChart(M, selectedSpin) {
 
                         y: {
 
+                            ticks: {
+
+                                color: "#cfe2f3"
+
+                            },
+
                             title: {
 
                                 display: true,
 
                                 text:
-                                    "Temps impropi t (s)"
+                                    "Temps impropi t (s)",
+
+                                color: "#cfe2f3"
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -759,7 +869,6 @@ function updateGravityChart(M, selectedSpin) {
                 }
 
             }
-
         );
 
 }
@@ -767,37 +876,18 @@ function updateGravityChart(M, selectedSpin) {
 
 
 /* =====================================================
-   ACTUALITZACIÓ AUTOMÀTICA
+   ACTUALITZACIÓ EN TEMPS REAL
 ===================================================== */
 
-/*
-    Cada vegada que es mou una barra,
-    es tornen a fer els càlculs i
-    s'actualitza la gràfica.
-*/
-
-
-massKinematic.addEventListener(
+massa.addEventListener(
     "input",
-    calculateKinematic
+    calcular
 );
 
 
-period.addEventListener(
+periode.addEventListener(
     "input",
-    calculateKinematic
-);
-
-
-massGravity.addEventListener(
-    "input",
-    calculateGravity
-);
-
-
-spin.addEventListener(
-    "input",
-    calculateGravity
+    calcular
 );
 
 
@@ -806,6 +896,4 @@ spin.addEventListener(
    CÀLCUL INICIAL
 ===================================================== */
 
-calculateKinematic();
-
-calculateGravity();
+calcular();
