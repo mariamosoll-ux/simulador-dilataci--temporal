@@ -12,7 +12,6 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- MathJax per mostrar les equacions -->
     <script>
         window.MathJax = {
             tex: {
@@ -26,7 +25,6 @@
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
 
-    <!-- Chart.js per a les gràfiques -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -35,23 +33,13 @@
 <body>
 
 
-<header>
-
-    <div class="header-content">
-
-        <h1>Simulador de dilatació temporal</h1>
-
-    </div>
-
-</header>
+<div class="contenidor">
 
 
-<main>
+    <h1>Simulador de dilatació temporal</h1>
 
 
-    <!-- INTRODUCCIÓ -->
-
-    <section class="intro">
+    <div class="introduccio">
 
         <p>
 
@@ -62,97 +50,113 @@
         </p>
 
 
-        <a href="explicacio.html" class="main-button">
+        <a href="explicacio.html" class="boto">
 
             Entén la dilatació temporal
 
         </a>
 
-    </section>
+    </div>
 
 
 
     <!-- =====================================================
-         DILATACIÓ TEMPORAL CINEMÀTICA
+         DADES D'ENTRADA
     ====================================================== -->
 
-    <section class="simulator-card">
+    <h2>Paràmetres del sistema</h2>
+
+
+    <div class="controls">
+
+
+        <div class="control">
+
+            <label for="massa">
+
+                Massa del forat negre
+
+            </label>
+
+
+            <div class="valor-control">
+
+                <span id="massaValor"></span>
+
+            </div>
+
+
+            <input
+                type="range"
+                id="massa"
+                min="1e30"
+                max="1e39"
+                step="1e36"
+                value="3.4e38"
+            >
+
+        </div>
+
+
+
+        <div class="control">
+
+            <label for="periode">
+
+                Període orbital
+
+            </label>
+
+
+            <div class="valor-control">
+
+                <span id="periodeValor"></span>
+
+            </div>
+
+
+            <input
+                type="range"
+                id="periode"
+                min="1000"
+                max="100000000"
+                step="1000"
+                value="1000000"
+            >
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DILATACIÓ CINEMÀTICA
+    ====================================================== -->
+
+    <section class="apartat">
+
 
         <h2>Dilatació temporal cinemàtica</h2>
 
 
         <p>
 
-            En aquest apartat es calcula la dilatació temporal produïda
-            pel moviment de l'objecte que orbita al voltant del forat negre.
+            La dilatació temporal cinemàtica es calcula a partir de la
+            velocitat orbital de l'objecte.
 
         </p>
 
 
-        <div class="controls">
+        <div class="resultats">
 
 
-            <div class="control">
-
-                <label for="massKinematic">
-
-                    Massa del forat negre:
-
-                    <strong id="massKinematicValue"></strong>
-
-                </label>
-
-
-                <input
-                    type="range"
-                    id="massKinematic"
-                    min="1e30"
-                    max="1e39"
-                    step="1e36"
-                    value="3.4e38"
-                >
-
-            </div>
-
-
-
-            <div class="control">
-
-                <label for="period">
-
-                    Període orbital:
-
-                    <strong id="periodValue"></strong>
-
-                </label>
-
-
-                <input
-                    type="range"
-                    id="period"
-                    min="100"
-                    max="100000000"
-                    step="100"
-                    value="1000000"
-                >
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- RESULTATS -->
-
-        <div class="results">
-
-
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Radi orbital</span>
 
-                <strong id="radiusResult"></strong>
+                <strong id="radi"></strong>
 
                 <small>m</small>
 
@@ -160,11 +164,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Velocitat orbital</span>
 
-                <strong id="velocityResult"></strong>
+                <strong id="velocitat"></strong>
 
                 <small>m/s</small>
 
@@ -172,11 +176,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Temps propi</span>
 
-                <strong>1</strong>
+                <strong>1,000000</strong>
 
                 <small>s</small>
 
@@ -184,11 +188,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Temps impropi</span>
 
-                <strong id="kinematicTimeResult"></strong>
+                <strong id="tempsCinematic"></strong>
 
                 <small>s</small>
 
@@ -198,85 +202,26 @@
         </div>
 
 
+        <div class="equacions">
 
-        <!-- EQUACIONS -->
+            \[
+            R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
+            \]
 
-        <div class="formula-section">
+            \[
+            v=\sqrt{\frac{GM}{R}}
+            \]
 
-            <h3>Model matemàtic</h3>
-
-
-            <p>
-
-                El radi orbital es determina a partir del període orbital
-                mitjançant:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
-                \]
-
-            </div>
-
-
-            <p>
-
-                La velocitat orbital es calcula mitjançant:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                v=\sqrt{\frac{GM}{R}}
-                \]
-
-            </div>
-
-
-            <p>
-
-                A partir de la velocitat obtinguda es calcula la dilatació
-                temporal cinemàtica:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
-                \]
-
-            </div>
-
-
-            <p>
-
-                \(t_0\) és el <strong>temps propi</strong>, és a dir,
-                l’interval temporal mesurat per un rellotge en repòs
-                respecte de l’objecte.
-
-                \(t\) és el <strong>temps impropi</strong>, l’interval
-                temporal mesurat pels rellotges del sistema de referència
-                en què l’objecte és mòbil amb velocitat \(v\) constant.
-
-            </p>
+            \[
+            t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
+            \]
 
         </div>
 
 
+        <div class="grafica">
 
-        <!-- GRÀFICA -->
-
-        <div class="chart-container">
-
-            <canvas id="kinematicChart"></canvas>
+            <canvas id="graficaCinematic"></canvas>
 
         </div>
 
@@ -286,87 +231,31 @@
 
 
     <!-- =====================================================
-         DILATACIÓ TEMPORAL GRAVITACIONAL
+         DILATACIÓ GRAVITACIONAL
     ====================================================== -->
 
-    <section class="simulator-card">
+    <section class="apartat">
+
 
         <h2>Dilatació temporal gravitacional</h2>
 
 
         <p>
 
-            En aquest apartat es calcula la dilatació temporal produïda
-            pel camp gravitacional del forat negre.
+            La dilatació temporal gravitacional es calcula a partir de la
+            massa del forat negre i del radi orbital obtingut anteriorment.
 
         </p>
 
 
-
-        <div class="controls">
-
-
-            <div class="control">
-
-                <label for="massGravity">
-
-                    Massa del forat negre:
-
-                    <strong id="massGravityValue"></strong>
-
-                </label>
+        <div class="resultats">
 
 
-                <input
-                    type="range"
-                    id="massGravity"
-                    min="1e30"
-                    max="1e39"
-                    step="1e36"
-                    value="3.4e38"
-                >
+            <div class="resultat">
 
-            </div>
+                <span>Radi orbital</span>
 
-
-
-            <div class="control">
-
-                <label for="spin">
-
-                    Spin adimensional:
-
-                    <strong id="spinValue"></strong>
-
-                </label>
-
-
-                <input
-                    type="range"
-                    id="spin"
-                    min="0"
-                    max="0.998"
-                    step="0.001"
-                    value="0.998"
-                >
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- RESULTATS -->
-
-        <div class="results">
-
-
-            <div class="result-box">
-
-                <span>Radi considerat</span>
-
-                <strong id="gravityRadiusResult"></strong>
+                <strong id="radiGravitacional"></strong>
 
                 <small>m</small>
 
@@ -374,11 +263,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Temps propi</span>
 
-                <strong>1</strong>
+                <strong>1,000000</strong>
 
                 <small>s</small>
 
@@ -386,11 +275,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Temps impropi</span>
 
-                <strong id="gravityTimeResult"></strong>
+                <strong id="tempsGravitacional"></strong>
 
                 <small>s</small>
 
@@ -398,11 +287,11 @@
 
 
 
-            <div class="result-box">
+            <div class="resultat">
 
                 <span>Factor temporal</span>
 
-                <strong id="gravityFactorResult"></strong>
+                <strong id="factorGravitacional"></strong>
 
             </div>
 
@@ -410,75 +299,22 @@
         </div>
 
 
+        <div class="equacions">
 
-        <!-- EQUACIONS -->
+            \[
+            t_0=t\sqrt{1-\frac{2GM}{rc^2}}
+            \]
 
-        <div class="formula-section">
-
-            <h3>Model matemàtic</h3>
-
-
-            <p>
-
-                El radi considerat es determina a partir de la massa i
-                del spin del forat negre:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                r=\frac{GM}{c^2}
-                \left(1+\sqrt{1-a^2}\right)
-                \]
-
-            </div>
-
-
-            <p>
-
-                La dilatació temporal gravitacional es calcula mitjançant:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                t_0=t\sqrt{1-\frac{2GM}{rc^2}}
-                \]
-
-            </div>
-
-
-            <p>
-
-                Equivalentment, el temps impropi es pot calcular com:
-
-            </p>
-
-
-            <div class="equation">
-
-                \[
-                t=
-                \frac{t_0}
-                {\sqrt{1-\frac{2GM}{rc^2}}}
-                \]
-
-            </div>
-
+            \[
+            t=\frac{t_0}{\sqrt{1-\frac{2GM}{rc^2}}}
+            \]
 
         </div>
 
 
+        <div class="grafica">
 
-        <!-- GRÀFICA -->
-
-        <div class="chart-container">
-
-            <canvas id="gravityChart"></canvas>
+            <canvas id="graficaGravitacional"></canvas>
 
         </div>
 
@@ -486,19 +322,8 @@
     </section>
 
 
-</main>
+</div>
 
-
-
-<footer>
-
-    <p>
-
-        Simulador de dilatació temporal · Treball de Recerca
-
-    </p>
-
-</footer>
 
 
 <script src="script.js"></script>
