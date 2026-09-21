@@ -1,7 +1,5 @@
 * {
-
     box-sizing: border-box;
-
 }
 
 
@@ -16,7 +14,6 @@ body {
     margin: 0;
 
     padding: 0;
-
 }
 
 
@@ -31,7 +28,6 @@ body {
     background-color: #082b4a;
 
     border-radius: 15px;
-
 }
 
 
@@ -44,7 +40,6 @@ h1 {
     margin-top: 0;
 
     margin-bottom: 35px;
-
 }
 
 
@@ -53,7 +48,6 @@ h2 {
     color: #6fa8dc;
 
     margin-top: 35px;
-
 }
 
 
@@ -64,7 +58,6 @@ p {
     font-size: 17px;
 
     line-height: 1.7;
-
 }
 
 
@@ -74,14 +67,12 @@ p {
 .introduccio {
 
     margin-bottom: 40px;
-
 }
 
 
 .introduccio p {
 
     margin-bottom: 25px;
-
 }
 
 
@@ -109,14 +100,12 @@ p {
     font-weight: bold;
 
     transition: 0.2s;
-
 }
 
 
 .boto:hover {
 
     background-color: #3d85c6;
-
 }
 
 
@@ -132,7 +121,6 @@ p {
     gap: 20px;
 
     margin-top: 25px;
-
 }
 
 
@@ -143,7 +131,6 @@ p {
     padding: 20px;
 
     border-radius: 10px;
-
 }
 
 
@@ -153,12 +140,11 @@ p {
 
     color: #cfe2f3;
 
-    font-size: 16px;
+    font-size: 15px;
 
     font-weight: bold;
 
     margin-bottom: 10px;
-
 }
 
 
@@ -169,7 +155,6 @@ p {
     font-weight: bold;
 
     margin-bottom: 12px;
-
 }
 
 
@@ -180,7 +165,6 @@ input[type="range"] {
     accent-color: #0b5394;
 
     cursor: pointer;
-
 }
 
 
@@ -192,7 +176,6 @@ input[type="range"] {
     margin-top: 45px;
 
     padding-top: 10px;
-
 }
 
 
@@ -208,7 +191,6 @@ input[type="range"] {
     gap: 12px;
 
     margin-top: 25px;
-
 }
 
 
@@ -218,86 +200,39 @@ input[type="range"] {
 
     color: #0b5394;
 
-    padding: 14px 10px;
+    padding: 12px 10px;
 
     border-radius: 10px;
 
     text-align: center;
 
-    min-height: 150px;
+    min-height: 175px;
 
-}
+    display: flex;
 
+    flex-direction: column;
 
-.resultat span {
-
-    display: block;
-
-    font-size: 14px;
-
-    margin-top: 10px;
-
-    margin-bottom: 10px;
-
-}
-
-
-.resultat strong {
-
-    display: block;
-
-    font-size: 18px;
-
-    word-break: break-word;
-
-}
-
-
-.resultat small {
-
-    display: block;
-
-    margin-top: 5px;
-
-    font-size: 12px;
-
-    line-height: 1.35;
-
+    align-items: center;
 }
 
 
 
-/* RESULTATS IMPORTANTS */
+/* RESULTATS DE TEMPS DESTACATS */
 
 .resultat.important {
 
     background-color: #d9eaf7;
-
-}
-
-
-.resultat.important span {
-
-    font-weight: bold;
-
-}
-
-
-.resultat.important strong {
-
-    font-size: 25px;
-
-    font-weight: bold;
-
 }
 
 
 
-/* FORMULES PETITES */
+/* FORMULA PETITA */
 
 .formula-petita {
 
-    height: 45px;
+    height: 35px;
+
+    width: 100%;
 
     display: flex;
 
@@ -305,19 +240,100 @@ input[type="range"] {
 
     justify-content: center;
 
-    font-size: 0.72rem;
+    font-size: 0.58rem;
 
     color: #0b5394;
 
     overflow: hidden;
 
+    opacity: 0.8;
 }
 
 
 .formula-petita mjx-container {
 
     margin: 0 !important;
+}
 
+
+
+/* TITOL DEL RESULTAT */
+
+.titol-resultat {
+
+    display: block;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.3px;
+
+    margin-top: 5px;
+
+    margin-bottom: 8px;
+}
+
+
+
+/* RESULTAT NUMÈRIC */
+
+.resultat strong {
+
+    display: block;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    line-height: 1.2;
+
+    word-break: break-word;
+
+    margin-top: 2px;
+}
+
+
+
+/* TEMPS MÉS DESTACATS */
+
+.resultat.important strong {
+
+    font-size: 28px;
+
+    font-weight: bold;
+}
+
+
+
+/* UNITAT */
+
+.unitat {
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    margin-top: 2px;
+}
+
+
+
+/* DESCRIPCIÓ DEL TEMPS */
+
+.descripcio-temps {
+
+    font-size: 10px;
+
+    line-height: 1.3;
+
+    color: #4f6f8a;
+
+    margin-top: auto;
+
+    padding-top: 10px;
+
+    max-width: 180px;
 }
 
 
@@ -339,7 +355,6 @@ input[type="range"] {
     padding: 15px;
 
     border-radius: 10px;
-
 }
 
 
@@ -353,21 +368,18 @@ input[type="range"] {
         margin: 25px 15px;
 
         padding: 25px;
-
     }
 
 
     .controls {
 
         grid-template-columns: 1fr;
-
     }
 
 
     .resultats {
 
         grid-template-columns: 1fr 1fr;
-
     }
 
 }
@@ -378,7 +390,6 @@ input[type="range"] {
     .resultats {
 
         grid-template-columns: 1fr;
-
     }
 
 }
