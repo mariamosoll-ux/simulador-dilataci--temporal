@@ -61,7 +61,7 @@ let chartGravitacional = null;
    FORMAT DELS NÚMEROS
 ===================================================== */
 
-function formatScientific(valor, decimals = 3) {
+function formatEnter(valor) {
 
     if (!Number.isFinite(valor)) {
 
@@ -69,38 +69,53 @@ function formatScientific(valor, decimals = 3) {
 
     }
 
-    return valor.toExponential(decimals);
+    return Math.round(valor).toLocaleString("ca-ES");
 
 }
 
 
+function formatDecimal(valor, decimals = 3) {
 
-function formatMassa(valor) {
+    if (!Number.isFinite(valor)) {
 
-    const massesSolars =
-        valor / 1.989e30;
+        return "—";
 
-    return (
-        valor.toExponential(3) +
-        " kg"
+    }
+
+    return valor.toLocaleString(
+        "ca-ES",
+        {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }
     );
 
 }
 
 
+function formatMassa(valor) {
 
-function formatPeriode(valor) {
+    return Math.round(valor).toLocaleString("ca-ES");
 
-    return valor.toLocaleString(
-        "ca-ES"
-    ) + " s";
+}
+
+
+function formatTemps(valor) {
+
+    if (!Number.isFinite(valor)) {
+
+        return "No definit";
+
+    }
+
+    return valor.toFixed(6);
 
 }
 
 
 
 /* =====================================================
-   CÀLCUL GENERAL
+   CÀLCUL PRINCIPAL
 ===================================================== */
 
 function calcular() {
@@ -157,7 +172,7 @@ function calcular() {
        t0 = 1 s
     ================================================= */
 
-    const termeCinematic =
+    const factorCinematic =
         1 -
         (
             (v * v) /
@@ -168,12 +183,12 @@ function calcular() {
     let tCinematic;
 
 
-    if (termeCinematic > 0) {
+    if (factorCinematic > 0) {
 
         tCinematic =
             1 /
             Math.sqrt(
-                termeCinematic
+                factorCinematic
             );
 
     } else {
@@ -187,14 +202,12 @@ function calcular() {
     /* =================================================
        DILATACIÓ GRAVITACIONAL
 
-       S'utilitza el mateix radi orbital R.
-
        t = t0 / √(1 - 2GM/Rc²)
 
        t0 = 1 s
     ================================================= */
 
-    const termeGravitacional =
+    const factorGravitacionalCalculat =
         1 -
         (
             (2 * G * M) /
@@ -209,12 +222,14 @@ function calcular() {
     let tGravitacional;
 
 
-    if (termeGravitacional > 0) {
+    if (
+        factorGravitacionalCalculat > 0
+    ) {
 
         tGravitacional =
             1 /
             Math.sqrt(
-                termeGravitacional
+                factorGravitacionalCalculat
             );
 
     } else {
@@ -226,44 +241,43 @@ function calcular() {
 
 
     /* =================================================
-       ACTUALITZAR TEXTOS
+       ACTUALITZAR RESULTATS
     ================================================= */
 
     massaValor.textContent =
-        formatMassa(M);
+        formatMassa(M) + " kg";
 
 
     periodeValor.textContent =
-        formatPeriode(T);
+        formatEnter(T) + " s";
 
 
     radi.textContent =
-        formatScientific(R);
+        formatEnter(R);
 
 
     velocitat.textContent =
-        formatScientific(v);
+        formatEnter(v);
 
 
     tempsCinematic.textContent =
-        Number.isFinite(tCinematic)
-            ? tCinematic.toFixed(9)
-            : "No definit";
+        formatTemps(tCinematic);
 
 
     radiGravitacional.textContent =
-        formatScientific(R);
+        formatEnter(R);
 
 
     tempsGravitacional.textContent =
-        Number.isFinite(tGravitacional)
-            ? tGravitacional.toFixed(9)
-            : "No definit";
+        formatTemps(tGravitacional);
 
 
     factorGravitacional.textContent =
         Number.isFinite(tGravitacional)
-            ? tGravitacional.toFixed(6)
+            ? formatDecimal(
+                tGravitacional,
+                6
+            )
             : "No definit";
 
 
@@ -289,147 +303,118 @@ function calcular() {
 
 /* =====================================================
    GRÀFICA CINEMÀTICA
+=====================================================
+
+   Eix X → temps propi
+   Eix Y → temps impropi
+
+   El temps propi es fixa en diferents valors
+   i es calcula el temps impropi corresponent.
 ===================================================== */
 
 function actualitzarGraficaCinematic(
     M,
-    periodeActual
+    Tactual
 ) {
 
-    const periodes = [];
+    const tempsPropi = [];
 
-    const temps = [];
+    const tempsImpropri = [];
 
 
 
     /*
-        La gràfica mostra com varia
-        el temps impropi en funció
-        del període orbital.
-
-        El període seleccionat queda
-        dins de la gràfica.
+        Calculem la dilatació per al
+        període actual.
     */
 
-    const minim =
-        Math.max(
-            1000,
-            periodeActual / 10
+    const Ractual =
+        Math.cbrt(
+            (
+                G *
+                M *
+                Tactual *
+                Tactual
+            ) /
+            (
+                4 *
+                Math.PI *
+                Math.PI
+            )
         );
 
 
-    const maxim =
-        periodeActual * 10;
+    const vactual =
+        Math.sqrt(
+            (G * M) /
+            Ractual
+        );
+
+
+    const factor =
+        1 -
+        (
+            (vactual * vactual) /
+            (c * c)
+        );
+
+
+    const factorDilatacio =
+        factor > 0
+            ? 1 / Math.sqrt(factor)
+            : null;
 
 
 
-    for (
-        let i = 0;
-        i < 50;
-        i++
-    ) {
+    if (factorDilatacio === null) {
 
-        const T =
-            minim *
-            Math.pow(
-                maxim / minim,
-                i / 49
-            );
-
-
-        const R =
-            Math.cbrt(
-                (
-                    G *
-                    M *
-                    T *
-                    T
-                ) /
-                (
-                    4 *
-                    Math.PI *
-                    Math.PI
-                )
-            );
-
-
-        const v =
-            Math.sqrt(
-                (G * M) / R
-            );
-
-
-        const terme =
-            1 -
-            (
-                (v * v) /
-                (c * c)
-            );
-
-
-        const t =
-            terme > 0
-                ? 1 / Math.sqrt(terme)
-                : null;
-
-
-        periodes.push(T);
-
-        temps.push(t);
+        return;
 
     }
 
 
 
     /*
-        Buscar el punt corresponent
-        al període actual.
+        Escala del gràfic:
+        0 fins a 10 segons de temps propi.
     */
-
-    let indexActual = 0;
-
-    let diferenciaMinima =
-        Infinity;
-
 
     for (
         let i = 0;
-        i < periodes.length;
+        i <= 20;
         i++
     ) {
 
-        const diferencia =
-            Math.abs(
-                periodes[i] -
-                periodeActual
-            );
+        const propi =
+            i * 0.5;
+
+        const impropi =
+            propi *
+            factorDilatacio;
 
 
-        if (
-            diferencia <
-            diferenciaMinima
-        ) {
+        tempsPropi.push(propi);
 
-            diferenciaMinima =
-                diferencia;
-
-            indexActual = i;
-
-        }
+        tempsImpropri.push(impropi);
 
     }
 
 
 
     /*
-        Crear la gràfica.
+        Punt corresponent a 1 segon.
     */
+
+    const indexActual = 2;
+
+
 
     if (chartCinematic !== null) {
 
         chartCinematic.destroy();
 
     }
+
 
 
     chartCinematic =
@@ -445,9 +430,14 @@ function actualitzarGraficaCinematic(
                 data: {
 
                     labels:
-                        periodes.map(
+                        tempsPropi.map(
                             valor =>
-                                valor.toExponential(1)
+                                valor.toLocaleString(
+                                    "ca-ES",
+                                    {
+                                        maximumFractionDigits: 1
+                                    }
+                                )
                         ),
 
 
@@ -456,16 +446,17 @@ function actualitzarGraficaCinematic(
                         {
 
                             label:
-                                "Temps impropi t (s)",
+                                "Temps impropi",
 
-                            data: temps,
+                            data:
+                                tempsImpropri,
 
                             borderWidth: 2,
 
-                            tension: 0.25,
+                            tension: 0.15,
 
                             pointRadius:
-                                periodes.map(
+                                tempsPropi.map(
                                     (_, index) =>
                                         index === indexActual
                                             ? 7
@@ -488,6 +479,18 @@ function actualitzarGraficaCinematic(
 
                     plugins: {
 
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Relació entre temps propi i temps impropi",
+
+                            color: "#cfe2f3"
+
+                        },
+
+
                         legend: {
 
                             labels: {
@@ -495,18 +498,6 @@ function actualitzarGraficaCinematic(
                                 color: "#cfe2f3"
 
                             }
-
-                        },
-
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Dilatació temporal cinemàtica",
-
-                            color: "#cfe2f3"
 
                         }
 
@@ -528,16 +519,9 @@ function actualitzarGraficaCinematic(
                                 display: true,
 
                                 text:
-                                    "Període orbital T (s)",
+                                    "Temps propi (s)",
 
                                 color: "#cfe2f3"
-
-                            },
-
-                            grid: {
-
-                                color:
-                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -557,16 +541,9 @@ function actualitzarGraficaCinematic(
                                 display: true,
 
                                 text:
-                                    "Temps impropi t (s)",
+                                    "Temps impropi (s)",
 
                                 color: "#cfe2f3"
-
-                            },
-
-                            grid: {
-
-                                color:
-                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -589,139 +566,109 @@ function actualitzarGraficaCinematic(
 
 function actualitzarGraficaGravitacional(
     M,
-    periodeActual
+    Tactual
 ) {
 
-    const periodes = [];
+    const tempsPropi = [];
 
-    const temps = [];
+    const tempsImpropri = [];
 
 
 
-    const minim =
-        Math.max(
-            1000,
-            periodeActual / 10
+    /*
+        Radi orbital actual.
+    */
+
+    const R =
+        Math.cbrt(
+            (
+                G *
+                M *
+                Tactual *
+                Tactual
+            ) /
+            (
+                4 *
+                Math.PI *
+                Math.PI
+            )
         );
 
 
-    const maxim =
-        periodeActual * 10;
-
-
 
     /*
-        Es calcula la dilatació gravitacional
-        per diferents períodes.
+        Factor gravitacional.
 
-        El radi es torna a obtenir a partir
-        de cada període.
+        t = t0 / √(1 - 2GM/Rc²)
     */
 
-    for (
-        let i = 0;
-        i < 50;
-        i++
-    ) {
-
-        const T =
-            minim *
-            Math.pow(
-                maxim / minim,
-                i / 49
-            );
-
-
-        const R =
-            Math.cbrt(
-                (
-                    G *
-                    M *
-                    T *
-                    T
-                ) /
-                (
-                    4 *
-                    Math.PI *
-                    Math.PI
-                )
-            );
-
-
-        const terme =
-            1 -
+    const terme =
+        1 -
+        (
+            (2 * G * M) /
             (
-                (2 * G * M) /
-                (
-                    R *
-                    c *
-                    c
-                )
-            );
+                R *
+                c *
+                c
+            )
+        );
 
 
-        const t =
-            terme > 0
-                ? 1 / Math.sqrt(terme)
-                : null;
+    const factorDilatacio =
+        terme > 0
+            ? 1 / Math.sqrt(terme)
+            : null;
 
 
-        periodes.push(T);
 
-        temps.push(t);
+    if (factorDilatacio === null) {
+
+        return;
 
     }
 
 
 
     /*
-        Buscar el punt actual.
+        Eix X:
+        temps propi
+
+        Eix Y:
+        temps impropi
     */
-
-    let indexActual = 0;
-
-    let diferenciaMinima =
-        Infinity;
-
 
     for (
         let i = 0;
-        i < periodes.length;
+        i <= 20;
         i++
     ) {
 
-        const diferencia =
-            Math.abs(
-                periodes[i] -
-                periodeActual
-            );
+        const propi =
+            i * 0.5;
+
+        const impropi =
+            propi *
+            factorDilatacio;
 
 
-        if (
-            diferencia <
-            diferenciaMinima
-        ) {
+        tempsPropi.push(propi);
 
-            diferenciaMinima =
-                diferencia;
-
-            indexActual = i;
-
-        }
+        tempsImpropri.push(impropi);
 
     }
 
 
 
-    /*
-        Crear la gràfica.
-    */
+    const indexActual = 2;
+
+
 
     if (chartGravitacional !== null) {
 
         chartGravitacional.destroy();
 
     }
+
 
 
     chartGravitacional =
@@ -737,9 +684,14 @@ function actualitzarGraficaGravitacional(
                 data: {
 
                     labels:
-                        periodes.map(
+                        tempsPropi.map(
                             valor =>
-                                valor.toExponential(1)
+                                valor.toLocaleString(
+                                    "ca-ES",
+                                    {
+                                        maximumFractionDigits: 1
+                                    }
+                                )
                         ),
 
 
@@ -748,16 +700,17 @@ function actualitzarGraficaGravitacional(
                         {
 
                             label:
-                                "Temps impropi t (s)",
+                                "Temps impropi",
 
-                            data: temps,
+                            data:
+                                tempsImpropri,
 
                             borderWidth: 2,
 
-                            tension: 0.25,
+                            tension: 0.15,
 
                             pointRadius:
-                                periodes.map(
+                                tempsPropi.map(
                                     (_, index) =>
                                         index === indexActual
                                             ? 7
@@ -780,6 +733,18 @@ function actualitzarGraficaGravitacional(
 
                     plugins: {
 
+                        title: {
+
+                            display: true,
+
+                            text:
+                                "Relació entre temps propi i temps impropi",
+
+                            color: "#cfe2f3"
+
+                        },
+
+
                         legend: {
 
                             labels: {
@@ -787,18 +752,6 @@ function actualitzarGraficaGravitacional(
                                 color: "#cfe2f3"
 
                             }
-
-                        },
-
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Dilatació temporal gravitacional",
-
-                            color: "#cfe2f3"
 
                         }
 
@@ -820,16 +773,9 @@ function actualitzarGraficaGravitacional(
                                 display: true,
 
                                 text:
-                                    "Període orbital T (s)",
+                                    "Temps propi (s)",
 
                                 color: "#cfe2f3"
-
-                            },
-
-                            grid: {
-
-                                color:
-                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -849,16 +795,9 @@ function actualitzarGraficaGravitacional(
                                 display: true,
 
                                 text:
-                                    "Temps impropi t (s)",
+                                    "Temps impropi (s)",
 
                                 color: "#cfe2f3"
-
-                            },
-
-                            grid: {
-
-                                color:
-                                    "rgba(207,226,243,0.15)"
 
                             }
 
@@ -876,7 +815,7 @@ function actualitzarGraficaGravitacional(
 
 
 /* =====================================================
-   ACTUALITZACIÓ EN TEMPS REAL
+   ACTUALITZACIÓ AUTOMÀTICA
 ===================================================== */
 
 massa.addEventListener(
@@ -893,7 +832,7 @@ periode.addEventListener(
 
 
 /* =====================================================
-   CÀLCUL INICIAL
+   INICIALITZACIÓ
 ===================================================== */
 
 calcular();
