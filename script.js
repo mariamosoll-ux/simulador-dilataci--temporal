@@ -58,10 +58,12 @@ let chartGravitacional = null;
 
 
 /* =====================================================
-   FORMAT DELS NÚMEROS
+   NOTACIÓ CIENTÍFICA
+   Exemple:
+   3.4e38 → 3,40 × 10^38
 ===================================================== */
 
-function formatEnter(valor) {
+function formatScientific(valor, decimals = 3) {
 
     if (!Number.isFinite(valor)) {
 
@@ -69,47 +71,52 @@ function formatEnter(valor) {
 
     }
 
-    return Math.round(valor).toLocaleString("ca-ES");
 
+    const exponent =
+        Math.floor(
+            Math.log10(
+                Math.abs(valor)
+            )
+        );
+
+
+    const mantissa =
+        valor /
+        Math.pow(
+            10,
+            exponent
+        );
+
+
+    const mantissaText =
+        mantissa.toLocaleString(
+            "ca-ES",
+            {
+                minimumFractionDigits: decimals - 1,
+                maximumFractionDigits: decimals - 1
+            }
+        );
+
+
+    return (
+        mantissaText +
+        " × 10<sup>" +
+        exponent +
+        "</sup>"
+    );
 }
 
 
-function formatDecimal(valor, decimals = 3) {
 
-    if (!Number.isFinite(valor)) {
+/* =====================================================
+   FORMAT PER AL PERÍODE
+===================================================== */
 
-        return "—";
-
-    }
+function formatNormal(valor) {
 
     return valor.toLocaleString(
-        "ca-ES",
-        {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals
-        }
+        "ca-ES"
     );
-
-}
-
-
-function formatMassa(valor) {
-
-    return Math.round(valor).toLocaleString("ca-ES");
-
-}
-
-
-function formatTemps(valor) {
-
-    if (!Number.isFinite(valor)) {
-
-        return "No definit";
-
-    }
-
-    return valor.toFixed(6);
-
 }
 
 
@@ -172,7 +179,7 @@ function calcular() {
        t0 = 1 s
     ================================================= */
 
-    const factorCinematic =
+    const termeCinematic =
         1 -
         (
             (v * v) /
@@ -183,12 +190,12 @@ function calcular() {
     let tCinematic;
 
 
-    if (factorCinematic > 0) {
+    if (termeCinematic > 0) {
 
         tCinematic =
             1 /
             Math.sqrt(
-                factorCinematic
+                termeCinematic
             );
 
     } else {
@@ -207,7 +214,7 @@ function calcular() {
        t0 = 1 s
     ================================================= */
 
-    const factorGravitacionalCalculat =
+    const termeGravitacional =
         1 -
         (
             (2 * G * M) /
@@ -222,14 +229,12 @@ function calcular() {
     let tGravitacional;
 
 
-    if (
-        factorGravitacionalCalculat > 0
-    ) {
+    if (termeGravitacional > 0) {
 
         tGravitacional =
             1 /
             Math.sqrt(
-                factorGravitacionalCalculat
+                termeGravitacional
             );
 
     } else {
@@ -241,43 +246,51 @@ function calcular() {
 
 
     /* =================================================
-       ACTUALITZAR RESULTATS
+       ACTUALITZAR PARÀMETRES
     ================================================= */
 
-    massaValor.textContent =
-        formatMassa(M) + " kg";
+    massaValor.innerHTML =
+        formatScientific(M, 3) +
+        " kg";
 
 
     periodeValor.textContent =
-        formatEnter(T) + " s";
+        formatNormal(T) +
+        " s";
 
 
-    radi.textContent =
-        formatEnter(R);
+
+    /* =================================================
+       ACTUALITZAR RESULTATS
+    ================================================= */
+
+    radi.innerHTML =
+        formatScientific(R, 3);
 
 
-    velocitat.textContent =
-        formatEnter(v);
+    velocitat.innerHTML =
+        formatScientific(v, 3);
 
 
     tempsCinematic.textContent =
-        formatTemps(tCinematic);
+        Number.isFinite(tCinematic)
+            ? tCinematic.toFixed(6)
+            : "No definit";
 
 
-    radiGravitacional.textContent =
-        formatEnter(R);
+    radiGravitacional.innerHTML =
+        formatScientific(R, 3);
 
 
     tempsGravitacional.textContent =
-        formatTemps(tGravitacional);
+        Number.isFinite(tGravitacional)
+            ? tGravitacional.toFixed(6)
+            : "No definit";
 
 
     factorGravitacional.textContent =
         Number.isFinite(tGravitacional)
-            ? formatDecimal(
-                tGravitacional,
-                6
-            )
+            ? tGravitacional.toFixed(6)
             : "No definit";
 
 
@@ -303,13 +316,6 @@ function calcular() {
 
 /* =====================================================
    GRÀFICA CINEMÀTICA
-=====================================================
-
-   Eix X → temps propi
-   Eix Y → temps impropi
-
-   El temps propi es fixa en diferents valors
-   i es calcula el temps impropi corresponent.
 ===================================================== */
 
 function actualitzarGraficaCinematic(
@@ -317,18 +323,7 @@ function actualitzarGraficaCinematic(
     Tactual
 ) {
 
-    const tempsPropi = [];
-
-    const tempsImpropri = [];
-
-
-
-    /*
-        Calculem la dilatació per al
-        període actual.
-    */
-
-    const Ractual =
+    const R =
         Math.cbrt(
             (
                 G *
@@ -344,40 +339,36 @@ function actualitzarGraficaCinematic(
         );
 
 
-    const vactual =
+    const v =
         Math.sqrt(
-            (G * M) /
-            Ractual
+            (G * M) / R
         );
 
 
-    const factor =
+    const terme =
         1 -
         (
-            (vactual * vactual) /
+            (v * v) /
             (c * c)
         );
 
 
-    const factorDilatacio =
-        factor > 0
-            ? 1 / Math.sqrt(factor)
-            : null;
-
-
-
-    if (factorDilatacio === null) {
+    if (terme <= 0) {
 
         return;
 
     }
 
 
+    const factor =
+        1 /
+        Math.sqrt(terme);
 
-    /*
-        Escala del gràfic:
-        0 fins a 10 segons de temps propi.
-    */
+
+    const tempsPropi = [];
+
+    const tempsImpropi = [];
+
 
     for (
         let i = 0;
@@ -388,25 +379,16 @@ function actualitzarGraficaCinematic(
         const propi =
             i * 0.5;
 
+
         const impropi =
-            propi *
-            factorDilatacio;
+            propi * factor;
 
 
         tempsPropi.push(propi);
 
-        tempsImpropri.push(impropi);
+        tempsImpropi.push(impropi);
 
     }
-
-
-
-    /*
-        Punt corresponent a 1 segon.
-    */
-
-    const indexActual = 2;
-
 
 
     if (chartCinematic !== null) {
@@ -414,7 +396,6 @@ function actualitzarGraficaCinematic(
         chartCinematic.destroy();
 
     }
-
 
 
     chartCinematic =
@@ -426,20 +407,9 @@ function actualitzarGraficaCinematic(
 
                 type: "line",
 
-
                 data: {
 
-                    labels:
-                        tempsPropi.map(
-                            valor =>
-                                valor.toLocaleString(
-                                    "ca-ES",
-                                    {
-                                        maximumFractionDigits: 1
-                                    }
-                                )
-                        ),
-
+                    labels: tempsPropi,
 
                     datasets: [
 
@@ -449,19 +419,13 @@ function actualitzarGraficaCinematic(
                                 "Temps impropi",
 
                             data:
-                                tempsImpropri,
+                                tempsImpropi,
 
                             borderWidth: 2,
 
-                            tension: 0.15,
+                            tension: 0.1,
 
-                            pointRadius:
-                                tempsPropi.map(
-                                    (_, index) =>
-                                        index === indexActual
-                                            ? 7
-                                            : 2
-                                )
+                            pointRadius: 2
 
                         }
 
@@ -569,16 +533,6 @@ function actualitzarGraficaGravitacional(
     Tactual
 ) {
 
-    const tempsPropi = [];
-
-    const tempsImpropri = [];
-
-
-
-    /*
-        Radi orbital actual.
-    */
-
     const R =
         Math.cbrt(
             (
@@ -595,13 +549,6 @@ function actualitzarGraficaGravitacional(
         );
 
 
-
-    /*
-        Factor gravitacional.
-
-        t = t0 / √(1 - 2GM/Rc²)
-    */
-
     const terme =
         1 -
         (
@@ -614,28 +561,22 @@ function actualitzarGraficaGravitacional(
         );
 
 
-    const factorDilatacio =
-        terme > 0
-            ? 1 / Math.sqrt(terme)
-            : null;
-
-
-
-    if (factorDilatacio === null) {
+    if (terme <= 0) {
 
         return;
 
     }
 
 
+    const factor =
+        1 /
+        Math.sqrt(terme);
 
-    /*
-        Eix X:
-        temps propi
 
-        Eix Y:
-        temps impropi
-    */
+    const tempsPropi = [];
+
+    const tempsImpropi = [];
+
 
     for (
         let i = 0;
@@ -646,21 +587,16 @@ function actualitzarGraficaGravitacional(
         const propi =
             i * 0.5;
 
+
         const impropi =
-            propi *
-            factorDilatacio;
+            propi * factor;
 
 
         tempsPropi.push(propi);
 
-        tempsImpropri.push(impropi);
+        tempsImpropi.push(impropi);
 
     }
-
-
-
-    const indexActual = 2;
-
 
 
     if (chartGravitacional !== null) {
@@ -668,7 +604,6 @@ function actualitzarGraficaGravitacional(
         chartGravitacional.destroy();
 
     }
-
 
 
     chartGravitacional =
@@ -680,20 +615,9 @@ function actualitzarGraficaGravitacional(
 
                 type: "line",
 
-
                 data: {
 
-                    labels:
-                        tempsPropi.map(
-                            valor =>
-                                valor.toLocaleString(
-                                    "ca-ES",
-                                    {
-                                        maximumFractionDigits: 1
-                                    }
-                                )
-                        ),
-
+                    labels: tempsPropi,
 
                     datasets: [
 
@@ -703,19 +627,13 @@ function actualitzarGraficaGravitacional(
                                 "Temps impropi",
 
                             data:
-                                tempsImpropri,
+                                tempsImpropi,
 
                             borderWidth: 2,
 
-                            tension: 0.15,
+                            tension: 0.1,
 
-                            pointRadius:
-                                tempsPropi.map(
-                                    (_, index) =>
-                                        index === indexActual
-                                            ? 7
-                                            : 2
-                                )
+                            pointRadius: 2
 
                         }
 
