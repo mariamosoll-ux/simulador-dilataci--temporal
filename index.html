@@ -60,10 +60,6 @@
 
 
 
-    <!-- =====================================================
-         DADES D'ENTRADA
-    ====================================================== -->
-
     <h2>Paràmetres del sistema</h2>
 
 
@@ -141,18 +137,18 @@
         <h2>Dilatació temporal cinemàtica</h2>
 
 
-        <p>
-
-            La dilatació temporal cinemàtica es calcula a partir de la
-            velocitat orbital de l'objecte.
-
-        </p>
-
-
         <div class="resultats">
 
 
             <div class="resultat">
+
+                <div class="formula-petita">
+
+                    \[
+                    R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
+                    \]
+
+                </div>
 
                 <span>Radi orbital</span>
 
@@ -166,6 +162,14 @@
 
             <div class="resultat">
 
+                <div class="formula-petita">
+
+                    \[
+                    v=\sqrt{\frac{GM}{R}}
+                    \]
+
+                </div>
+
                 <span>Velocitat orbital</span>
 
                 <strong id="velocitat"></strong>
@@ -176,45 +180,48 @@
 
 
 
-            <div class="resultat">
+            <div class="resultat important">
+
+                <div class="formula-petita">
+
+                    \[
+                    t_0
+                    \]
+
+                </div>
 
                 <span>Temps propi</span>
 
                 <strong>1,000000</strong>
 
-                <small>s</small>
+                <small>
+                    s · temps mesurat per l'observador situat en el camp gravitatori
+                </small>
 
             </div>
 
 
 
-            <div class="resultat">
+            <div class="resultat important">
+
+                <div class="formula-petita">
+
+                    \[
+                    t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
+                    \]
+
+                </div>
 
                 <span>Temps impropi</span>
 
                 <strong id="tempsCinematic"></strong>
 
-                <small>s</small>
+                <small>
+                    s · temps mesurat per un observador llunyà
+                </small>
 
             </div>
 
-
-        </div>
-
-
-        <div class="equacions">
-
-            \[
-            R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
-            \]
-
-            \[
-            v=\sqrt{\frac{GM}{R}}
-            \]
-
-            \[
-            t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
-            \]
 
         </div>
 
@@ -240,18 +247,18 @@
         <h2>Dilatació temporal gravitacional</h2>
 
 
-        <p>
-
-            La dilatació temporal gravitacional es calcula a partir de la
-            massa del forat negre i del radi orbital obtingut anteriorment.
-
-        </p>
-
-
         <div class="resultats">
 
 
             <div class="resultat">
+
+                <div class="formula-petita">
+
+                    \[
+                    R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
+                    \]
+
+                </div>
 
                 <span>Radi orbital</span>
 
@@ -263,51 +270,71 @@
 
 
 
-            <div class="resultat">
+            <div class="resultat important">
+
+                <div class="formula-petita">
+
+                    \[
+                    t_0
+                    \]
+
+                </div>
 
                 <span>Temps propi</span>
 
                 <strong>1,000000</strong>
 
-                <small>s</small>
+                <small>
+                    s · temps mesurat per l'observador situat en el camp gravitatori
+                </small>
 
             </div>
 
 
 
-            <div class="resultat">
+            <div class="resultat important">
+
+                <div class="formula-petita">
+
+                    \[
+                    t=\frac{t_0}
+                    {\sqrt{1-\frac{2GM}{Rc^2}}}
+                    \]
+
+                </div>
 
                 <span>Temps impropi</span>
 
                 <strong id="tempsGravitacional"></strong>
 
-                <small>s</small>
+                <small>
+                    s · temps mesurat per un observador llunyà
+                </small>
 
             </div>
 
 
 
-            <div class="resultat">
+            <div class="resultat important">
 
-                <span>Factor temporal</span>
+                <div class="formula-petita">
+
+                    \[
+                    \frac{t}{t_0}
+                    \]
+
+                </div>
+
+                <span>Factor de dilatació</span>
 
                 <strong id="factorGravitacional"></strong>
 
+                <small>
+                    relació entre els dos temps
+                </small>
+
             </div>
 
-
-        </div>
-
-
-        <div class="equacions">
-
-            \[
-            t_0=t\sqrt{1-\frac{2GM}{rc^2}}
-            \]
-
-            \[
-            t=\frac{t_0}{\sqrt{1-\frac{2GM}{rc^2}}}
-            \]
 
         </div>
 
