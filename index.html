@@ -42,18 +42,14 @@
     <div class="introduccio">
 
         <p>
-
             Simulador interactiu de dilatació temporal desenvolupat com a part
             pràctica d’un Treball de Recerca de Batxillerat sobre la relativitat
             del temps en les proximitats d’un forat negre.
-
         </p>
 
 
         <a href="explicacio.html" class="boto">
-
             Entén la dilatació temporal
-
         </a>
 
     </div>
@@ -69,18 +65,12 @@
         <div class="control">
 
             <label for="massa">
-
-                Massa del forat negre
-
+                MASSA DEL FORAT NEGRE
             </label>
 
-
             <div class="valor-control">
-
                 <span id="massaValor"></span>
-
             </div>
-
 
             <input
                 type="range"
@@ -98,18 +88,12 @@
         <div class="control">
 
             <label for="periode">
-
-                Període orbital
-
+                PERÍODE ORBITAL
             </label>
 
-
             <div class="valor-control">
-
                 <span id="periodeValor"></span>
-
             </div>
-
 
             <input
                 type="range"
@@ -127,9 +111,7 @@
 
 
 
-    <!-- =====================================================
-         DILATACIÓ CINEMÀTICA
-    ====================================================== -->
+    <!-- DILATACIÓ CINEMÀTICA -->
 
     <section class="apartat">
 
@@ -143,18 +125,20 @@
             <div class="resultat">
 
                 <div class="formula-petita">
-
                     \[
                     R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
                     \]
-
                 </div>
 
-                <span>Radi orbital</span>
+                <span class="titol-resultat">
+                    RADI ORBITAL
+                </span>
 
                 <strong id="radi"></strong>
 
-                <small>m</small>
+                <div class="unitat">
+                    m
+                </div>
 
             </div>
 
@@ -163,18 +147,20 @@
             <div class="resultat">
 
                 <div class="formula-petita">
-
                     \[
                     v=\sqrt{\frac{GM}{R}}
                     \]
-
                 </div>
 
-                <span>Velocitat orbital</span>
+                <span class="titol-resultat">
+                    VELOCITAT ORBITAL
+                </span>
 
                 <strong id="velocitat"></strong>
 
-                <small>m/s</small>
+                <div class="unitat">
+                    m/s
+                </div>
 
             </div>
 
@@ -183,20 +169,25 @@
             <div class="resultat important">
 
                 <div class="formula-petita">
-
                     \[
                     t_0
                     \]
-
                 </div>
 
-                <span>Temps propi</span>
+                <span class="titol-resultat">
+                    TEMPS PROPI
+                </span>
 
                 <strong>1,000000</strong>
 
-                <small>
-                    s · temps mesurat per l'observador situat en el camp gravitatori
-                </small>
+                <div class="unitat">
+                    s
+                </div>
+
+                <div class="descripcio-temps">
+                    Temps mesurat per l'observador situat
+                    en el camp gravitatori.
+                </div>
 
             </div>
 
@@ -205,20 +196,25 @@
             <div class="resultat important">
 
                 <div class="formula-petita">
-
                     \[
                     t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
                     \]
-
                 </div>
 
-                <span>Temps impropi</span>
+                <span class="titol-resultat">
+                    TEMPS IMPROPI
+                </span>
 
                 <strong id="tempsCinematic"></strong>
 
-                <small>
-                    s · temps mesurat per un observador llunyà
-                </small>
+                <div class="unitat">
+                    s
+                </div>
+
+                <div class="descripcio-temps">
+                    Temps mesurat per un observador
+                    llunyà al camp gravitatori.
+                </div>
 
             </div>
 
@@ -237,9 +233,7 @@
 
 
 
-    <!-- =====================================================
-         DILATACIÓ GRAVITACIONAL
-    ====================================================== -->
+    <!-- DILATACIÓ GRAVITACIONAL -->
 
     <section class="apartat">
 
@@ -253,18 +247,20 @@
             <div class="resultat">
 
                 <div class="formula-petita">
-
                     \[
                     R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
                     \]
-
                 </div>
 
-                <span>Radi orbital</span>
+                <span class="titol-resultat">
+                    RADI ORBITAL
+                </span>
 
                 <strong id="radiGravitacional"></strong>
 
-                <small>m</small>
+                <div class="unitat">
+                    m
+                </div>
 
             </div>
 
@@ -273,20 +269,25 @@
             <div class="resultat important">
 
                 <div class="formula-petita">
-
                     \[
                     t_0
                     \]
-
                 </div>
 
-                <span>Temps propi</span>
+                <span class="titol-resultat">
+                    TEMPS PROPI
+                </span>
 
                 <strong>1,000000</strong>
 
-                <small>
-                    s · temps mesurat per l'observador situat en el camp gravitatori
-                </small>
+                <div class="unitat">
+                    s
+                </div>
+
+                <div class="descripcio-temps">
+                    Temps mesurat per l'observador situat
+                    en el camp gravitatori.
+                </div>
 
             </div>
 
@@ -295,21 +296,26 @@
             <div class="resultat important">
 
                 <div class="formula-petita">
-
                     \[
                     t=\frac{t_0}
                     {\sqrt{1-\frac{2GM}{Rc^2}}}
                     \]
-
                 </div>
 
-                <span>Temps impropi</span>
+                <span class="titol-resultat">
+                    TEMPS IMPROPI
+                </span>
 
                 <strong id="tempsGravitacional"></strong>
 
-                <small>
-                    s · temps mesurat per un observador llunyà
-                </small>
+                <div class="unitat">
+                    s
+                </div>
+
+                <div class="descripcio-temps">
+                    Temps mesurat per un observador
+                    llunyà al camp gravitatori.
+                </div>
 
             </div>
 
@@ -318,20 +324,21 @@
             <div class="resultat important">
 
                 <div class="formula-petita">
-
                     \[
                     \frac{t}{t_0}
                     \]
-
                 </div>
 
-                <span>Factor de dilatació</span>
+                <span class="titol-resultat">
+                    FACTOR DE DILATACIÓ
+                </span>
 
                 <strong id="factorGravitacional"></strong>
 
-                <small>
-                    relació entre els dos temps
-                </small>
+                <div class="descripcio-temps">
+                    Relació entre el temps impropi
+                    i el temps propi.
+                </div>
 
             </div>
 
