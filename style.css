@@ -69,9 +69,7 @@ p {
 
 
 
-/* =====================================================
-   INTRODUCCIÓ
-===================================================== */
+/* INTRODUCCIÓ */
 
 .introduccio {
 
@@ -88,9 +86,7 @@ p {
 
 
 
-/* =====================================================
-   BOTÓ
-===================================================== */
+/* BOTÓ */
 
 .boto {
 
@@ -125,9 +121,7 @@ p {
 
 
 
-/* =====================================================
-   CONTROLS
-===================================================== */
+/* CONTROLS */
 
 .controls {
 
@@ -191,9 +185,7 @@ input[type="range"] {
 
 
 
-/* =====================================================
-   APARTATS
-===================================================== */
+/* APARTATS */
 
 .apartat {
 
@@ -205,9 +197,7 @@ input[type="range"] {
 
 
 
-/* =====================================================
-   RESULTATS
-===================================================== */
+/* RESULTATS */
 
 .resultats {
 
@@ -228,13 +218,13 @@ input[type="range"] {
 
     color: #0b5394;
 
-    padding: 15px 10px;
+    padding: 14px 10px;
 
     border-radius: 10px;
 
     text-align: center;
 
-    min-height: 100px;
+    min-height: 150px;
 
 }
 
@@ -244,6 +234,8 @@ input[type="range"] {
     display: block;
 
     font-size: 14px;
+
+    margin-top: 10px;
 
     margin-bottom: 10px;
 
@@ -265,44 +257,72 @@ input[type="range"] {
 
     display: block;
 
-    margin-top: 4px;
+    margin-top: 5px;
 
-    font-size: 13px;
+    font-size: 12px;
 
-}
-
-
-
-/* =====================================================
-   EQUACIONS
-===================================================== */
-
-.equacions {
-
-    color: #9fc5e8;
-
-    font-size: 0.85rem;
-
-    text-align: center;
-
-    margin-top: 12px;
-
-    opacity: 0.9;
-
-}
-
-
-.equacions mjx-container {
-
-    margin: 8px 0 !important;
+    line-height: 1.35;
 
 }
 
 
 
-/* =====================================================
-   GRÀFIQUES
-===================================================== */
+/* RESULTATS IMPORTANTS */
+
+.resultat.important {
+
+    background-color: #d9eaf7;
+
+}
+
+
+.resultat.important span {
+
+    font-weight: bold;
+
+}
+
+
+.resultat.important strong {
+
+    font-size: 25px;
+
+    font-weight: bold;
+
+}
+
+
+
+/* FORMULES PETITES */
+
+.formula-petita {
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 0.72rem;
+
+    color: #0b5394;
+
+    overflow: hidden;
+
+}
+
+
+.formula-petita mjx-container {
+
+    margin: 0 !important;
+
+}
+
+
+
+/* GRÀFIQUES */
 
 .grafica {
 
@@ -324,9 +344,7 @@ input[type="range"] {
 
 
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* RESPONSIVE */
 
 @media (max-width: 800px) {
 
