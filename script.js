@@ -56,7 +56,7 @@ let chartGravitacional = null;
 
 
 /* =====================================================
-   FORMAT CIENTÍFIC DELS RESULTATS
+   FORMAT CIENTÍFIC
 ===================================================== */
 
 function formatScientific(valor, decimals = 3) {
@@ -108,11 +108,6 @@ function formatNormal(valor) {
         return "0";
     }
 
-    /*
-       Evita la notació científica de JavaScript.
-       Manté els nombres com a nombres normals.
-    */
-
     return new Intl.NumberFormat(
         "ca-ES",
         {
@@ -145,8 +140,10 @@ function obtenirMassa() {
     }
 
 
-    return mantissa *
-        Math.pow(10, exponent);
+    return (
+        mantissa *
+        Math.pow(10, exponent)
+    );
 }
 
 
@@ -172,13 +169,15 @@ function obtenirPeriode() {
     }
 
 
-    return mantissa *
-        Math.pow(10, exponent);
+    return (
+        mantissa *
+        Math.pow(10, exponent)
+    );
 }
 
 
 /* =====================================================
-   ACTUALITZAR CONTROLS
+   ACTUALITZAR VALORS DELS CONTROLS
 ===================================================== */
 
 function actualitzarControls() {
@@ -200,7 +199,7 @@ function actualitzarControls() {
 
 
 /* =====================================================
-   CÀLCUL PRINCIPAL
+   CÀLCUL DEL SIMULADOR
 ===================================================== */
 
 function calcular() {
@@ -225,66 +224,93 @@ function calcular() {
     }
 
 
-    /* RADI ORBITAL */
+    /* =================================================
+       1. RADI ORBITAL
 
-    const R =
+       R = ∛(G M T² / 4π²)
+    ================================================= */
+
+    const radiOrbital =
         Math.cbrt(
             (
                 G *
                 M *
-                T *
-                T
+                Math.pow(T, 2)
             )
             /
             (
                 4 *
-                Math.PI *
-                Math.PI
+                Math.pow(Math.PI, 2)
             )
         );
 
 
-    /* VELOCITAT ORBITAL */
+    /* =================================================
+       2. VELOCITAT ORBITAL
 
-    const v =
+       v = √(GM/R)
+    ================================================= */
+
+    const velocitatOrbital =
         Math.sqrt(
-            (G * M) / R
+            (
+                G *
+                M
+            )
+            /
+            radiOrbital
         );
 
 
-    /* FACTOR CINEMÀTIC */
+    /* =================================================
+       3. DILATACIÓ TEMPORAL CINEMÀTICA
+
+       t = t0 / √(1 - v²/c²)
+
+       t0 = 1 s
+    ================================================= */
+
+    const tempsPropi = 1;
+
 
     const termeCinematic =
         1 -
         (
-            v * v
-        )
-        /
-        (
-            c * c
+            Math.pow(
+                velocitatOrbital,
+                2
+            )
+            /
+            Math.pow(c, 2)
         );
 
 
-    let factorCinematicValor;
+    let tempsImpropiCinematic;
 
 
     if (termeCinematic > 0) {
 
-        factorCinematicValor =
-            1 /
+        tempsImpropiCinematic =
+            tempsPropi /
             Math.sqrt(
                 termeCinematic
             );
 
     } else {
 
-        factorCinematicValor =
+        tempsImpropiCinematic =
             Infinity;
 
     }
 
 
-    /* FACTOR GRAVITACIONAL */
+    /* =================================================
+       4. DILATACIÓ TEMPORAL GRAVITACIONAL
+
+       tf = t0 / √(1 - 2GM/Rc²)
+
+       t0 = 1 s
+    ================================================= */
 
     const termeGravitacional =
         1 -
@@ -295,44 +321,63 @@ function calcular() {
         )
         /
         (
-            R *
-            c *
-            c
+            radiOrbital *
+            Math.pow(c, 2)
         );
 
 
-    let factorGravitacionalValor;
+    let tempsImpropiGravitacional;
 
 
     if (termeGravitacional > 0) {
 
-        factorGravitacionalValor =
-            1 /
+        tempsImpropiGravitacional =
+            tempsPropi /
             Math.sqrt(
                 termeGravitacional
             );
 
     } else {
 
-        factorGravitacionalValor =
+        tempsImpropiGravitacional =
             Infinity;
 
     }
 
 
-    /* MOSTRAR RESULTATS */
+    /* =================================================
+       FACTORS DE DILATACIÓ
+    ================================================= */
+
+    const factorCinematicValor =
+        tempsImpropiCinematic /
+        tempsPropi;
+
+
+    const factorGravitacionalValor =
+        tempsImpropiGravitacional /
+        tempsPropi;
+
+
+    /* =================================================
+       MOSTRAR RESULTATS
+    ================================================= */
 
     radi.innerHTML =
-        formatScientific(R);
+        formatScientific(
+            radiOrbital
+        );
 
 
     velocitat.innerHTML =
-        formatScientific(v);
+        formatScientific(
+            velocitatOrbital
+        );
 
 
     tempsCinematic.innerHTML =
         formatScientific(
-            factorCinematicValor
+            tempsImpropiCinematic
         );
 
 
@@ -343,12 +388,14 @@ function calcular() {
 
 
     radiGravitacional.innerHTML =
-        formatScientific(R);
+        formatScientific(
+            radiOrbital
+        );
 
 
     tempsGravitacional.innerHTML =
         formatScientific(
-            factorGravitacionalValor
+            tempsImpropiGravitacional
         );
 
 
@@ -358,7 +405,9 @@ function calcular() {
         );
 
 
-    /* ACTUALITZAR GRÀFIQUES */
+    /* =================================================
+       ACTUALITZAR GRÀFIQUES
+    ================================================= */
 
     chartCinematic =
         actualitzarGrafica(
@@ -380,7 +429,7 @@ function calcular() {
 
 
 /* =====================================================
-   DADES DE LES GRÀFIQUES
+   GENERAR DADES DE LA GRÀFICA
 ===================================================== */
 
 function generarDades(factor) {
@@ -407,7 +456,8 @@ function generarDades(factor) {
 
 
         const tempsImpropi =
-            tempsPropi * factor;
+            tempsPropi *
+            factor;
 
 
         dades.push({
@@ -426,7 +476,7 @@ function generarDades(factor) {
 
 
 /* =====================================================
-   GRÀFIQUES
+   ACTUALITZAR GRÀFICA
 ===================================================== */
 
 function actualitzarGrafica(
@@ -697,7 +747,7 @@ function actualitzarGrafica(
 
 
 /* =====================================================
-   ACTUALITZACIÓ AUTOMÀTICA
+   ACTUALITZACIÓ DELS RESULTATS
 ===================================================== */
 
 massaMantissa.addEventListener(
@@ -725,7 +775,7 @@ periodeExponent.addEventListener(
 
 
 /* =====================================================
-   INICIAR
+   INICIAR EL SIMULADOR
 ===================================================== */
 
 calcular();
