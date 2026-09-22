@@ -3,7 +3,6 @@
 ===================================================== */
 
 const G = 6.67430e-11;
-
 const c = 299792458;
 
 
@@ -48,7 +47,6 @@ const factorGravitacional =
 
 
 let chartCinematic = null;
-
 let chartGravitacional = null;
 
 
@@ -56,7 +54,7 @@ let chartGravitacional = null;
    NOTACIÓ CIENTÍFICA
 ===================================================== */
 
-function formatScientific(valor) {
+function formatScientific(valor, decimals = 3) {
 
     if (!Number.isFinite(valor)) {
         return "No definit";
@@ -82,7 +80,7 @@ function formatScientific(valor) {
 
     return (
         mantissa
-            .toFixed(3)
+            .toFixed(decimals)
             .replace(".", ",") +
         " × 10<sup>" +
         exponent +
@@ -92,7 +90,43 @@ function formatScientific(valor) {
 
 
 /* =====================================================
-   FORMAT DEL TEMPS
+   NOTACIÓ CIENTÍFICA PER AL TOOLTIP
+===================================================== */
+
+function scientificText(valor) {
+
+    if (!Number.isFinite(valor)) {
+        return "No definit";
+    }
+
+    if (valor === 0) {
+        return "0";
+    }
+
+    const exponent =
+        Math.floor(
+            Math.log10(
+                Math.abs(valor)
+            )
+        );
+
+    const mantissa =
+        valor /
+        Math.pow(
+            10,
+            exponent
+        );
+
+    return (
+        mantissa.toFixed(3).replace(".", ",") +
+        " × 10^" +
+        exponent
+    );
+}
+
+
+/* =====================================================
+   FORMAT DELS TEMPS
 ===================================================== */
 
 function formatTemps(valor) {
@@ -108,12 +142,7 @@ function formatTemps(valor) {
 
 
 /* =====================================================
-   CONVERTIR EN NÚMERO
-   Accepta:
-
-   3.4e38
-   3,4e38
-   340000000000000000000
+   CONVERSIÓ DELS INPUTS
 ===================================================== */
 
 function convertirNumero(text) {
@@ -160,25 +189,14 @@ massaInput.addEventListener(
                 massaInput.value
             );
 
-
         if (
             Number.isFinite(valor) &&
             valor > 0
         ) {
 
-            /*
-                El slider només representa
-                fins a 10^42 kg.
-
-                L'input manual pot superar
-                aquest valor.
-            */
-
             if (
-                valor >=
-                Number(massa.min) &&
-                valor <=
-                Number(massa.max)
+                valor >= Number(massa.min) &&
+                valor <= Number(massa.max)
             ) {
 
                 massa.value =
@@ -224,10 +242,9 @@ periodeInput.addEventListener(
                 periodeInput.value
             );
 
-
         /*
-            El període mai pot ser
-            negatiu ni igual a zero.
+            El període sempre ha de ser
+            estrictament positiu.
         */
 
         if (
@@ -235,17 +252,9 @@ periodeInput.addEventListener(
             valor > 0
         ) {
 
-            /*
-                Si està dins del rang
-                del slider, també
-                actualitzem el slider.
-            */
-
             if (
-                valor >=
-                Number(periode.min) &&
-                valor <=
-                Number(periode.max)
+                valor >= Number(periode.min) &&
+                valor <= Number(periode.max)
             ) {
 
                 periode.value =
@@ -277,10 +286,6 @@ function calcular() {
             periodeInput.value
         );
 
-
-    /*
-        Evita valors no vàlids.
-    */
 
     if (
         !Number.isFinite(M) ||
@@ -420,8 +425,8 @@ function calcular() {
         );
 
 
-    factorCinematic.textContent =
-        formatTemps(
+    factorCinematic.innerHTML =
+        formatScientific(
             factorCinematicValor
         );
 
@@ -436,8 +441,8 @@ function calcular() {
         );
 
 
-    factorGravitacional.textContent =
-        formatTemps(
+    factorGravitacional.innerHTML =
+        formatScientific(
             factorGravitacionalValor
         );
 
@@ -446,38 +451,28 @@ function calcular() {
        GRÀFIQUES
     ================================================= */
 
-    actualitzarGrafica(
-        "graficaCinematic",
-        factorCinematicValor,
-        "Temps propi i temps impropi — efecte cinemàtic",
-        chartCinematic,
-        "cinematic"
-    );
+    chartCinematic =
+        actualitzarGrafica(
+            "graficaCinematic",
+            factorCinematicValor,
+            "Temps propi i temps impropi — efecte cinemàtic",
+            chartCinematic
+        );
 
 
-    actualitzarGrafica(
-        "graficaGravitacional",
-        factorGravitacionalValor,
-        "Temps propi i temps impropi — efecte gravitacional",
-        chartGravitacional,
-        "gravitacional"
-    );
+    chartGravitacional =
+        actualitzarGrafica(
+            "graficaGravitacional",
+            factorGravitacionalValor,
+            "Temps propi i temps impropi — efecte gravitacional",
+            chartGravitacional
+        );
 
 }
 
 
 /* =====================================================
-   CREAR DADES DE LA GRÀFICA
-
-   X = temps propi
-   Y = temps impropi
-
-   Si factor = 7:
-
-   1 → 7
-   2 → 14
-   3 → 21
-   ...
+   DADES DE LES GRÀFIQUES
 ===================================================== */
 
 function generarDades(factor) {
@@ -491,14 +486,6 @@ function generarDades(factor) {
 
     }
 
-
-    /*
-        Es manté sempre el mateix
-        interval de temps propi.
-
-        Això permet comparar
-        visualment les dues gràfiques.
-    */
 
     const tempsMaxim =
         10;
@@ -548,16 +535,20 @@ function generarDades(factor) {
 
 
 /* =====================================================
-   GRÀFICA
+   CREACIÓ DE LES GRÀFIQUES
 ===================================================== */
 
 function actualitzarGrafica(
     canvasId,
     factor,
     titol,
-    graficaAnterior,
-    tipus
+    graficaAnterior
 ) {
+
+    /*
+        Elimina la gràfica anterior abans
+        de crear la nova.
+    */
 
     if (
         graficaAnterior !== null
@@ -606,7 +597,7 @@ function actualitzarGrafica(
                         {
 
                             label:
-                                "Temps impropi",
+                                "Relació temporal",
 
                             data:
                                 dades,
@@ -618,7 +609,10 @@ function actualitzarGrafica(
                                 3,
 
                             pointRadius:
-                                0,
+                                3,
+
+                            pointHoverRadius:
+                                7,
 
                             tension:
                                 0,
@@ -646,6 +640,17 @@ function actualitzarGrafica(
 
                         duration:
                             200
+
+                    },
+
+
+                    interaction: {
+
+                        mode:
+                            "nearest",
+
+                        intersect:
+                            false
 
                     },
 
@@ -679,6 +684,68 @@ function actualitzarGrafica(
 
                                 color:
                                     "#cfe2f3"
+
+                            }
+
+                        },
+
+
+                        /*
+                            TOOLTIP:
+                            quan poses el cursor sobre
+                            la línia apareix l'equivalència.
+                        */
+
+                        tooltip: {
+
+                            enabled:
+                                true,
+
+                            displayColors:
+                                false,
+
+                            callbacks: {
+
+                                title:
+                                    function(context) {
+
+                                        const x =
+                                            context[0]
+                                                .parsed
+                                                .x;
+
+                                        return (
+                                            "Equivalència temporal"
+                                        );
+
+                                    },
+
+
+                                label:
+                                    function(context) {
+
+                                        const x =
+                                            context
+                                                .parsed
+                                                .x;
+
+                                        const y =
+                                            context
+                                                .parsed
+                                                .y;
+
+
+                                        return [
+                                            "Temps propi: " +
+                                            scientificText(x) +
+                                            " s",
+
+                                            "Temps impropi: " +
+                                            scientificText(y) +
+                                            " s"
+                                        ];
+
+                                    }
 
                             }
 
@@ -748,7 +815,16 @@ function actualitzarGrafica(
                             ticks: {
 
                                 color:
-                                    "#cfe2f3"
+                                    "#cfe2f3",
+
+                                callback:
+                                    function(value) {
+
+                                        return scientificText(
+                                            value
+                                        );
+
+                                    }
 
                             }
 
@@ -763,17 +839,6 @@ function actualitzarGrafica(
 
 
     return grafica;
-}
-
-
-/* =====================================================
-   ACTUALITZACIÓ DE LES GRÀFIQUES
-===================================================== */
-
-function actualitzarTotesLesGrafiques() {
-
-    calcular();
-
 }
 
 
