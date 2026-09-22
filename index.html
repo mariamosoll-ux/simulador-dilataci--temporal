@@ -1,408 +1,90 @@
-<!DOCTYPE html>
-<html lang="ca">
+<div class="controls">
 
-<head>
+    <!-- MASSA -->
 
-    <meta charset="UTF-8">
+    <div class="control">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        <label>
+            MASSA DEL FORAT NEGRE
+        </label>
 
-    <title>Simulador de dilatació temporal</title>
+        <div class="valor-control">
+            <strong id="massaValor"></strong>
+        </div>
 
-    <link rel="stylesheet" href="style.css">
+        <input
+            type="range"
+            id="massaMantissa"
+            min="1"
+            max="9.9"
+            step="0.1"
+            value="3.4"
+        >
 
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']]
-            }
-        };
-    </script>
+        <input
+            type="range"
+            id="massaExponent"
+            min="30"
+            max="100"
+            step="1"
+            value="38"
+        >
 
-    <script async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
+        <div class="rang">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            Mantissa:
+            <span id="massaMantissaValor">3,4</span>
 
-</head>
+            × 10^
 
+            <span id="massaExponentValor">38</span>
 
-<body>
-
-
-<div class="contenidor">
-
-
-    <h1>Simulador de dilatació temporal</h1>
-
-
-    <div class="introduccio">
-
-        <p>
-            Simulador interactiu de dilatació temporal desenvolupat com a part
-            pràctica d’un Treball de Recerca de Batxillerat sobre la relativitat
-            del temps en les proximitats d’un forat negre.
-        </p>
-
-
-        <a href="explicacio.html" class="boto">
-            Entén la dilatació temporal
-        </a>
+        </div>
 
     </div>
 
 
-    <h2>Paràmetres del sistema</h2>
+    <!-- PERÍODE -->
 
+    <div class="control">
 
-    <div class="controls">
+        <label>
+            PERÍODE ORBITAL
+        </label>
 
-
-        <!-- MASSA -->
-
-        <div class="control">
-
-            <label for="massa">
-                MASSA DEL FORAT NEGRE
-            </label>
-
-            <input
-                type="text"
-                id="massaInput"
-                value="3.4e38"
-                inputmode="decimal"
-            >
-
-            <span class="unitat-input">
-                kg
-            </span>
-
-            <input
-                type="range"
-                id="massa"
-                min="1e30"
-                max="1e42"
-                step="1e36"
-                value="3.4e38"
-            >
-
+        <div class="valor-control">
+            <strong id="periodeValor"></strong>
         </div>
 
+        <input
+            type="range"
+            id="periodeMantissa"
+            min="1"
+            max="9.9"
+            step="0.1"
+            value="1"
+        >
 
-        <!-- PERÍODE -->
+        <input
+            type="range"
+            id="periodeExponent"
+            min="0"
+            max="100"
+            step="1"
+            value="6"
+        >
 
-        <div class="control">
+        <div class="rang">
 
-            <label for="periode">
-                PERÍODE ORBITAL
-            </label>
+            Mantissa:
+            <span id="periodeMantissaValor">1,0</span>
 
-            <input
-                type="text"
-                id="periodeInput"
-                value="1e6"
-                inputmode="decimal"
-            >
+            × 10^
 
-            <span class="unitat-input">
-                s
-            </span>
-
-            <input
-                type="range"
-                id="periode"
-                min="1"
-                max="1e15"
-                step="1e9"
-                value="1e6"
-            >
+            <span id="periodeExponentValor">6</span>
 
         </div>
-
 
     </div>
-
-
-
-    <!-- =================================================
-         DILATACIÓ CINEMÀTICA
-    ================================================== -->
-
-    <section class="apartat">
-
-        <h2>Dilatació temporal cinemàtica</h2>
-
-
-        <div class="resultats">
-
-
-            <div class="resultat">
-
-                <div class="formula-petita">
-                    \[
-                    R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    RADI ORBITAL
-                </span>
-
-                <strong id="radi"></strong>
-
-                <div class="unitat">
-                    m
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat">
-
-                <div class="formula-petita">
-                    \[
-                    v=\sqrt{\frac{GM}{R}}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    VELOCITAT ORBITAL
-                </span>
-
-                <strong id="velocitat"></strong>
-
-                <div class="unitat">
-                    m/s
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    t_0
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    TEMPS PROPI
-                </span>
-
-                <strong>1,000000</strong>
-
-                <div class="unitat">
-                    s
-                </div>
-
-                <div class="descripcio-temps">
-                    Temps mesurat per l'observador situat
-                    en el camp gravitatori.
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    t=\frac{t_0}
-                    {\sqrt{1-\frac{v^2}{c^2}}}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    TEMPS IMPROPI
-                </span>
-
-                <strong id="tempsCinematic"></strong>
-
-                <div class="unitat">
-                    s
-                </div>
-
-                <div class="descripcio-temps">
-                    Temps mesurat per un observador llunyà
-                    al camp gravitatori.
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    \frac{t}{t_0}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    FACTOR DE DILATACIÓ
-                </span>
-
-                <strong id="factorCinematic"></strong>
-
-                <div class="descripcio-temps">
-                    Relació entre el temps impropi
-                    i el temps propi.
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="grafica">
-
-            <canvas id="graficaCinematic"></canvas>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =================================================
-         DILATACIÓ GRAVITACIONAL
-    ================================================== -->
-
-    <section class="apartat">
-
-        <h2>Dilatació temporal gravitacional</h2>
-
-
-        <div class="resultats">
-
-
-            <div class="resultat">
-
-                <div class="formula-petita">
-                    \[
-                    R=\sqrt[3]{\frac{GMT^2}{4\pi^2}}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    RADI ORBITAL
-                </span>
-
-                <strong id="radiGravitacional"></strong>
-
-                <div class="unitat">
-                    m
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    t_0
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    TEMPS PROPI
-                </span>
-
-                <strong>1,000000</strong>
-
-                <div class="unitat">
-                    s
-                </div>
-
-                <div class="descripcio-temps">
-                    Temps mesurat per l'observador situat
-                    en el camp gravitatori.
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    t=\frac{t_0}
-                    {\sqrt{1-\frac{2GM}{Rc^2}}}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    TEMPS IMPROPI
-                </span>
-
-                <strong id="tempsGravitacional"></strong>
-
-                <div class="unitat">
-                    s
-                </div>
-
-                <div class="descripcio-temps">
-                    Temps mesurat per un observador llunyà
-                    al camp gravitatori.
-                </div>
-
-            </div>
-
-
-
-            <div class="resultat important">
-
-                <div class="formula-petita">
-                    \[
-                    \frac{t}{t_0}
-                    \]
-                </div>
-
-                <span class="titol-resultat">
-                    FACTOR DE DILATACIÓ
-                </span>
-
-                <strong id="factorGravitacional"></strong>
-
-                <div class="descripcio-temps">
-                    Relació entre el temps impropi
-                    i el temps propi.
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="grafica">
-
-            <canvas id="graficaGravitacional"></canvas>
-
-        </div>
-
-
-    </section>
-
 
 </div>
-
-
-<script src="script.js"></script>
-
-</body>
-
-</html>
