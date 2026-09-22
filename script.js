@@ -25,26 +25,14 @@ const periodeExponent =
 
 
 /* =====================================================
-   TEXTOS DELS CONTROLS
+   VALORS DELS CONTROLS
 ===================================================== */
 
 const massaValor =
     document.getElementById("massaValor");
 
-const massaMantissaValor =
-    document.getElementById("massaMantissaValor");
-
-const massaExponentValor =
-    document.getElementById("massaExponentValor");
-
 const periodeValor =
     document.getElementById("periodeValor");
-
-const periodeMantissaValor =
-    document.getElementById("periodeMantissaValor");
-
-const periodeExponentValor =
-    document.getElementById("periodeExponentValor");
 
 
 /* =====================================================
@@ -143,7 +131,7 @@ function formatScientific(valor, decimals = 3) {
 
 
 /* =====================================================
-   MASSA
+   OBTENIR MASSA
 ===================================================== */
 
 function obtenirMassa() {
@@ -158,6 +146,21 @@ function obtenirMassa() {
         Number(
             massaExponent.value
         );
+
+
+    if (
+
+        !Number.isFinite(mantissa) ||
+
+        !Number.isFinite(exponent) ||
+
+        mantissa <= 0
+
+    ) {
+
+        return NaN;
+
+    }
 
 
     return (
@@ -175,7 +178,7 @@ function obtenirMassa() {
 
 
 /* =====================================================
-   PERÍODE
+   OBTENIR PERÍODE
 ===================================================== */
 
 function obtenirPeriode() {
@@ -192,9 +195,20 @@ function obtenirPeriode() {
         );
 
 
-    /*
-        El període és sempre positiu.
-    */
+    if (
+
+        !Number.isFinite(mantissa) ||
+
+        !Number.isFinite(exponent) ||
+
+        mantissa <= 0
+
+    ) {
+
+        return NaN;
+
+    }
+
 
     return (
 
@@ -225,39 +239,17 @@ function actualitzarControls() {
 
 
     massaValor.innerHTML =
+
         formatScientific(M)
         +
         " kg";
 
 
     periodeValor.innerHTML =
+
         formatScientific(T)
         +
         " s";
-
-
-    massaMantissaValor.textContent =
-        Number(
-            massaMantissa.value
-        )
-        .toFixed(1)
-        .replace(".", ",");
-
-
-    massaExponentValor.textContent =
-        massaExponent.value;
-
-
-    periodeMantissaValor.textContent =
-        Number(
-            periodeMantissa.value
-        )
-        .toFixed(1)
-        .replace(".", ",");
-
-
-    periodeExponentValor.textContent =
-        periodeExponent.value;
 
 }
 
@@ -350,8 +342,6 @@ function calcular() {
 
     /* =================================================
        FACTOR CINEMÀTIC
-
-       γ = 1 / √(1-v²/c²)
     ================================================= */
 
     const termeCinematic =
@@ -404,8 +394,6 @@ function calcular() {
 
     /* =================================================
        FACTOR GRAVITACIONAL
-
-       γ = 1 / √(1-2GM/Rc²)
     ================================================= */
 
     const termeGravitacional =
@@ -465,7 +453,7 @@ function calcular() {
 
 
     /* =================================================
-       MOSTRAR RESULTATS
+       RESULTATS
     ================================================= */
 
     radi.innerHTML =
@@ -520,7 +508,7 @@ function calcular() {
 
 
     /* =================================================
-       ACTUALITZAR GRÀFIQUES
+       GRÀFIQUES
     ================================================= */
 
     chartCinematic =
@@ -556,7 +544,7 @@ function calcular() {
 
 
 /* =====================================================
-   DADES DE LA GRÀFICA
+   DADES DE LES GRÀFIQUES
 ===================================================== */
 
 function generarDades(factor) {
@@ -577,12 +565,6 @@ function generarDades(factor) {
     const dades = [];
 
 
-    /*
-        El temps propi va de 0 a 10 s.
-        Cada punt representa una equivalència
-        entre temps propi i temps impropi.
-    */
-
     for (
 
         let i = 0;
@@ -594,15 +576,11 @@ function generarDades(factor) {
     ) {
 
         const tempsPropi =
-
             i / 10;
 
 
         const tempsImpropi =
-
-            tempsPropi *
-
-            factor;
+            tempsPropi * factor;
 
 
         dades.push({
@@ -624,7 +602,7 @@ function generarDades(factor) {
 
 
 /* =====================================================
-   GRÀFICA
+   ACTUALITZAR GRÀFICA
 ===================================================== */
 
 function actualitzarGrafica(
@@ -665,12 +643,10 @@ function actualitzarGrafica(
 
 
     const canvas =
-
         document.getElementById(id);
 
 
     const dades =
-
         generarDades(factor);
 
 
@@ -779,8 +755,7 @@ function actualitzarGrafica(
                                 title:
                                     function() {
 
-                                        return
-                                            "Equivalència temporal";
+                                        return "Equivalència temporal";
 
                                     },
 
@@ -827,7 +802,6 @@ function actualitzarGrafica(
 
                             type:
                                 "linear",
-
 
                             beginAtZero:
                                 true,
@@ -911,47 +885,35 @@ function actualitzarGrafica(
 
 
 /* =====================================================
-   ESDEVENIMENTS DELS SLIDERS
+   CONTROLS
 ===================================================== */
 
 massaMantissa.addEventListener(
-
     "input",
-
     calcular
-
 );
 
 
 massaExponent.addEventListener(
-
     "input",
-
     calcular
-
 );
 
 
 periodeMantissa.addEventListener(
-
     "input",
-
     calcular
-
 );
 
 
 periodeExponent.addEventListener(
-
     "input",
-
     calcular
-
 );
 
 
 /* =====================================================
-   INICIAR
+   INICIALITZACIÓ
 ===================================================== */
 
 calcular();
