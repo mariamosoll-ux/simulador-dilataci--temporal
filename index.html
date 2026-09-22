@@ -22,7 +22,7 @@
     </script>
 
     <script async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -62,21 +62,26 @@
     <div class="controls">
 
 
+        <!-- MASSA -->
+
         <div class="control">
 
             <label for="massa">
                 MASSA DEL FORAT NEGRE
             </label>
 
-            <div class="valor-control">
-                <span id="massaValor"></span>
-            </div>
+            <input
+                type="number"
+                id="massaInput"
+                step="1e36"
+                value="3.4e38"
+            >
 
             <input
                 type="range"
                 id="massa"
                 min="1e30"
-                max="1e39"
+                max="1e40"
                 step="1e36"
                 value="3.4e38"
             >
@@ -85,23 +90,33 @@
 
 
 
+        <!-- PERÍODE -->
+
         <div class="control">
 
             <label for="periode">
                 PERÍODE ORBITAL
             </label>
 
-            <div class="valor-control">
-                <span id="periodeValor"></span>
-            </div>
+            <input
+                type="number"
+                id="periodeInput"
+                min="1"
+                step="1"
+                value="1000000"
+            >
+
+            <span class="unitat-input">
+                s
+            </span>
 
             <input
                 type="range"
                 id="periode"
-                min="0.1"
-                max="100"
-                step="0.1"
-                value="10"
+                min="1"
+                max="1e12"
+                step="1e6"
+                value="1e6"
             >
 
         </div>
@@ -211,8 +226,8 @@
                 </div>
 
                 <div class="descripcio-temps">
-                    Temps mesurat per un observador
-                    llunyà al camp gravitatori.
+                    Temps mesurat per un observador llunyà
+                    al camp gravitatori.
                 </div>
 
             </div>
@@ -311,8 +326,8 @@
                 </div>
 
                 <div class="descripcio-temps">
-                    Temps mesurat per un observador
-                    llunyà al camp gravitatori.
+                    Temps mesurat per un observador llunyà
+                    al camp gravitatori.
                 </div>
 
             </div>
@@ -332,11 +347,6 @@
                 </span>
 
                 <strong id="factorGravitacional"></strong>
-
-                <div class="descripcio-temps">
-                    Relació entre el temps impropi
-                    i el temps propi.
-                </div>
 
             </div>
 
@@ -358,7 +368,6 @@
 
 
 <script src="script.js"></script>
-
 
 </body>
 
