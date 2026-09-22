@@ -829,46 +829,44 @@ function actualitzarGrafica(
                             }
 
                         },
+y: {
 
+    beginAtZero:
+        true,
 
-                        y: {
+    title: {
 
-                            beginAtZero:
-                                true,
+        display:
+            true,
 
+        text:
+            "Temps impropi (s)",
 
-                            title: {
+        color:
+            "#cfe2f3"
 
-                                display:
-                                    true,
+    },
 
-                                text:
-                                    "Temps impropi (s)",
+    ticks: {
 
-                                color:
-                                    "#cfe2f3"
+        color:
+            "#cfe2f3",
 
-                            },
+        callback:
+            function(value) {
 
+                return Number(value).toLocaleString(
+                    "ca-ES",
+                    {
+                        maximumFractionDigits: 6
+                    }
+                );
 
-                            ticks: {
+            }
 
-                                color:
-                                    "#cfe2f3",
+    }
 
-
-                                callback:
-                                    function(value) {
-
-                                        return formatScientific(
-                                            value
-                                        );
-
-                                    }
-
-                            }
-
-                        }
+}
 
                     }
 
