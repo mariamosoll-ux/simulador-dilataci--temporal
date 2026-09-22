@@ -1,13 +1,14 @@
 /* =====================================================
-   CONSTANTS
+   CONSTANTS FÍSIQUES
 ===================================================== */
 
 const G = 6.67430e-11;
+
 const c = 299792458;
 
 
 /* =====================================================
-   ELEMENTS
+   ELEMENTS HTML
 ===================================================== */
 
 const massa =
@@ -32,6 +33,10 @@ const velocitat =
 const tempsCinematic =
     document.getElementById("tempsCinematic");
 
+const factorCinematic =
+    document.getElementById("factorCinematic");
+
+
 const radiGravitacional =
     document.getElementById("radiGravitacional");
 
@@ -43,6 +48,7 @@ const factorGravitacional =
 
 
 let chartCinematic = null;
+
 let chartGravitacional = null;
 
 
@@ -75,7 +81,9 @@ function formatScientific(valor) {
         );
 
     return (
-        mantissa.toFixed(3).replace(".", ",") +
+        mantissa
+            .toFixed(3)
+            .replace(".", ",") +
         " × 10<sup>" +
         exponent +
         "</sup>"
@@ -84,7 +92,7 @@ function formatScientific(valor) {
 
 
 /* =====================================================
-   FORMAT DELS TEMPS
+   FORMAT DEL TEMPS
 ===================================================== */
 
 function formatTemps(valor) {
@@ -100,33 +108,30 @@ function formatTemps(valor) {
 
 
 /* =====================================================
-   ACTUALITZAR SLIDER MASSA
+   CONVERTIR EN NÚMERO
+   Accepta:
+
+   3.4e38
+   3,4e38
+   340000000000000000000
 ===================================================== */
 
-massaInput.addEventListener(
-    "input",
-    () => {
+function convertirNumero(text) {
 
-        let valor =
-            Number(massaInput.value);
-
-        if (
-            valor >= Number(massa.min) &&
-            valor <= Number(massa.max)
-        ) {
-
-            massa.value =
-                valor;
-
-            calcular();
-        }
-
+    if (typeof text !== "string") {
+        return Number(text);
     }
-);
+
+    return Number(
+        text
+            .trim()
+            .replace(",", ".")
+    );
+}
 
 
 /* =====================================================
-   ACTUALITZAR INPUT MASSA
+   MASSA — SLIDER
 ===================================================== */
 
 massa.addEventListener(
@@ -143,31 +148,54 @@ massa.addEventListener(
 
 
 /* =====================================================
-   INPUT MANUAL MASSA
+   MASSA — INPUT MANUAL
 ===================================================== */
 
 massaInput.addEventListener(
-    "change",
+    "input",
     () => {
 
-        let valor =
-            Number(massaInput.value);
+        const valor =
+            convertirNumero(
+                massaInput.value
+            );
 
-        if (!Number.isFinite(valor) || valor <= 0) {
-            return;
+
+        if (
+            Number.isFinite(valor) &&
+            valor > 0
+        ) {
+
+            /*
+                El slider només representa
+                fins a 10^42 kg.
+
+                L'input manual pot superar
+                aquest valor.
+            */
+
+            if (
+                valor >=
+                Number(massa.min) &&
+                valor <=
+                Number(massa.max)
+            ) {
+
+                massa.value =
+                    valor;
+
+            }
+
+            calcular();
+
         }
-
-        massa.value =
-            valor;
-
-        calcular();
 
     }
 );
 
 
 /* =====================================================
-   ACTUALITZAR SLIDER PERÍODE
+   PERÍODE — SLIDER
 ===================================================== */
 
 periode.addEventListener(
@@ -184,54 +212,75 @@ periode.addEventListener(
 
 
 /* =====================================================
-   INPUT MANUAL PERÍODE
+   PERÍODE — INPUT MANUAL
 ===================================================== */
 
 periodeInput.addEventListener(
-    "change",
+    "input",
     () => {
 
-        let valor =
-            Number(periodeInput.value);
+        const valor =
+            convertirNumero(
+                periodeInput.value
+            );
 
-        if (!Number.isFinite(valor) || valor <= 0) {
-            return;
-        }
 
         /*
-            El slider només pot arribar fins
-            a 10¹² s, però l'input permet
-            introduir valors encara més grans.
+            El període mai pot ser
+            negatiu ni igual a zero.
         */
 
         if (
-            valor >= Number(periode.min) &&
-            valor <= Number(periode.max)
+            Number.isFinite(valor) &&
+            valor > 0
         ) {
 
-            periode.value =
-                valor;
+            /*
+                Si està dins del rang
+                del slider, també
+                actualitzem el slider.
+            */
+
+            if (
+                valor >=
+                Number(periode.min) &&
+                valor <=
+                Number(periode.max)
+            ) {
+
+                periode.value =
+                    valor;
+
+            }
+
+            calcular();
 
         }
-
-        calcular();
 
     }
 );
 
 
 /* =====================================================
-   CÀLCUL
+   CÀLCUL PRINCIPAL
 ===================================================== */
 
 function calcular() {
 
     const M =
-        Number(massaInput.value);
+        convertirNumero(
+            massaInput.value
+        );
 
     const T =
-        Number(periodeInput.value);
+        convertirNumero(
+            periodeInput.value
+        );
 
+
+    /*
+        Evita valors no vàlids.
+    */
 
     if (
         !Number.isFinite(M) ||
@@ -239,12 +288,16 @@ function calcular() {
         M <= 0 ||
         T <= 0
     ) {
+
         return;
+
     }
 
 
     /* =================================================
        RADI ORBITAL
+
+       R = ∛(GMT² / 4π²)
     ================================================= */
 
     const R =
@@ -265,6 +318,8 @@ function calcular() {
 
     /* =================================================
        VELOCITAT ORBITAL
+
+       v = √(GM/R)
     ================================================= */
 
     const v =
@@ -274,7 +329,9 @@ function calcular() {
 
 
     /* =================================================
-       DILATACIÓ CINEMÀTICA
+       FACTOR CINEMÀTIC
+
+       γ = 1 / √(1-v²/c²)
     ================================================= */
 
     const termeCinematic =
@@ -285,11 +342,14 @@ function calcular() {
         );
 
 
-    let tCinematic;
+    let factorCinematicValor;
 
-    if (termeCinematic > 0) {
 
-        tCinematic =
+    if (
+        termeCinematic > 0
+    ) {
+
+        factorCinematicValor =
             1 /
             Math.sqrt(
                 termeCinematic
@@ -297,14 +357,16 @@ function calcular() {
 
     } else {
 
-        tCinematic =
+        factorCinematicValor =
             Infinity;
 
     }
 
 
     /* =================================================
-       DILATACIÓ GRAVITACIONAL
+       FACTOR GRAVITACIONAL
+
+       γ = 1 / √(1-2GM/Rc²)
     ================================================= */
 
     const termeGravitacional =
@@ -319,11 +381,14 @@ function calcular() {
         );
 
 
-    let tGravitacional;
+    let factorGravitacionalValor;
 
-    if (termeGravitacional > 0) {
 
-        tGravitacional =
+    if (
+        termeGravitacional > 0
+    ) {
+
+        factorGravitacionalValor =
             1 /
             Math.sqrt(
                 termeGravitacional
@@ -331,7 +396,7 @@ function calcular() {
 
     } else {
 
-        tGravitacional =
+        factorGravitacionalValor =
             Infinity;
 
     }
@@ -344,25 +409,36 @@ function calcular() {
     radi.innerHTML =
         formatScientific(R);
 
+
     velocitat.innerHTML =
         formatScientific(v);
 
+
     tempsCinematic.textContent =
         formatTemps(
-            tCinematic
+            factorCinematicValor
         );
+
+
+    factorCinematic.textContent =
+        formatTemps(
+            factorCinematicValor
+        );
+
 
     radiGravitacional.innerHTML =
         formatScientific(R);
 
+
     tempsGravitacional.textContent =
         formatTemps(
-            tGravitacional
+            factorGravitacionalValor
         );
+
 
     factorGravitacional.textContent =
         formatTemps(
-            tGravitacional
+            factorGravitacionalValor
         );
 
 
@@ -370,18 +446,38 @@ function calcular() {
        GRÀFIQUES
     ================================================= */
 
-    actualitzarGraficaCinematic(
-        tCinematic
+    actualitzarGrafica(
+        "graficaCinematic",
+        factorCinematicValor,
+        "Temps propi i temps impropi — efecte cinemàtic",
+        chartCinematic,
+        "cinematic"
     );
 
-    actualitzarGraficaGravitacional(
-        tGravitacional
+
+    actualitzarGrafica(
+        "graficaGravitacional",
+        factorGravitacionalValor,
+        "Temps propi i temps impropi — efecte gravitacional",
+        chartGravitacional,
+        "gravitacional"
     );
+
 }
 
 
 /* =====================================================
-   GENERAR DADES DE LA GRÀFICA
+   CREAR DADES DE LA GRÀFICA
+
+   X = temps propi
+   Y = temps impropi
+
+   Si factor = 7:
+
+   1 → 7
+   2 → 14
+   3 → 21
+   ...
 ===================================================== */
 
 function generarDades(factor) {
@@ -390,36 +486,43 @@ function generarDades(factor) {
         !Number.isFinite(factor) ||
         factor <= 0
     ) {
+
         return [];
+
     }
 
 
     /*
-        Busquem automàticament una escala
-        adequada per veure la relació.
+        Es manté sempre el mateix
+        interval de temps propi.
 
-        Es generen 50 punts.
+        Això permet comparar
+        visualment les dues gràfiques.
     */
 
-    const punts = 50;
+    const tempsMaxim =
+        10;
 
-    const maxPropi = 10;
+
+    const nombrePunts =
+        100;
+
 
     const dades = [];
 
 
     for (
         let i = 0;
-        i <= punts;
+        i <= nombrePunts;
         i++
     ) {
 
         const tempsPropi =
             (
                 i /
-                punts
+                nombrePunts
             ) *
-            maxPropi;
+            tempsMaxim;
 
 
         const tempsImpropi =
@@ -445,33 +548,40 @@ function generarDades(factor) {
 
 
 /* =====================================================
-   GRÀFICA CINEMÀTICA
+   GRÀFICA
 ===================================================== */
 
-function actualitzarGraficaCinematic(
-    factor
+function actualitzarGrafica(
+    canvasId,
+    factor,
+    titol,
+    graficaAnterior,
+    tipus
 ) {
 
-    if (chartCinematic !== null) {
+    if (
+        graficaAnterior !== null
+    ) {
 
-        chartCinematic.destroy();
+        graficaAnterior.destroy();
 
-        chartCinematic = null;
     }
-
-
-    const canvas =
-        document.getElementById(
-            "graficaCinematic"
-        );
 
 
     if (
         !Number.isFinite(factor) ||
         factor <= 0
     ) {
-        return;
+
+        return null;
+
     }
+
+
+    const canvas =
+        document.getElementById(
+            canvasId
+        );
 
 
     const dades =
@@ -480,12 +590,13 @@ function actualitzarGraficaCinematic(
         );
 
 
-    chartCinematic =
+    const grafica =
         new Chart(
             canvas,
             {
 
-                type: "line",
+                type:
+                    "line",
 
 
                 data: {
@@ -500,13 +611,20 @@ function actualitzarGraficaCinematic(
                             data:
                                 dades,
 
-                            parsing: false,
+                            parsing:
+                                false,
 
-                            borderWidth: 3,
+                            borderWidth:
+                                3,
 
-                            pointRadius: 2,
+                            pointRadius:
+                                0,
 
-                            tension: 0
+                            tension:
+                                0,
+
+                            fill:
+                                false
 
                         }
 
@@ -517,19 +635,43 @@ function actualitzarGraficaCinematic(
 
                 options: {
 
-                    responsive: true,
+                    responsive:
+                        true,
 
-                    maintainAspectRatio: false,
+                    maintainAspectRatio:
+                        false,
 
 
                     animation: {
 
-                        duration: 250
+                        duration:
+                            200
 
                     },
 
 
                     plugins: {
+
+                        title: {
+
+                            display:
+                                true,
+
+                            text:
+                                titol,
+
+                            color:
+                                "#cfe2f3",
+
+                            font: {
+
+                                size:
+                                    15
+
+                            }
+
+                        },
+
 
                         legend: {
 
@@ -539,18 +681,6 @@ function actualitzarGraficaCinematic(
                                     "#cfe2f3"
 
                             }
-
-                        },
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps propi i temps impropi",
-
-                            color:
-                                "#cfe2f3"
 
                         }
 
@@ -564,9 +694,17 @@ function actualitzarGraficaCinematic(
                             type:
                                 "linear",
 
+                            min:
+                                0,
+
+                            max:
+                                10,
+
+
                             title: {
 
-                                display: true,
+                                display:
+                                    true,
 
                                 text:
                                     "Temps propi (s)",
@@ -575,6 +713,7 @@ function actualitzarGraficaCinematic(
                                     "#cfe2f3"
 
                             },
+
 
                             ticks: {
 
@@ -591,9 +730,11 @@ function actualitzarGraficaCinematic(
                             beginAtZero:
                                 true,
 
+
                             title: {
 
-                                display: true,
+                                display:
+                                    true,
 
                                 text:
                                     "Temps impropi (s)",
@@ -602,6 +743,7 @@ function actualitzarGraficaCinematic(
                                     "#cfe2f3"
 
                             },
+
 
                             ticks: {
 
@@ -618,194 +760,39 @@ function actualitzarGraficaCinematic(
 
             }
         );
+
+
+    return grafica;
 }
 
 
 /* =====================================================
-   GRÀFICA GRAVITACIONAL
+   ACTUALITZACIÓ DE LES GRÀFIQUES
 ===================================================== */
 
-function actualitzarGraficaGravitacional(
-    factor
-) {
+function actualitzarTotesLesGrafiques() {
 
-    if (chartGravitacional !== null) {
+    calcular();
 
-        chartGravitacional.destroy();
-
-        chartGravitacional = null;
-    }
-
-
-    const canvas =
-        document.getElementById(
-            "graficaGravitacional"
-        );
-
-
-    if (
-        !Number.isFinite(factor) ||
-        factor <= 0
-    ) {
-        return;
-    }
-
-
-    const dades =
-        generarDades(
-            factor
-        );
-
-
-    chartGravitacional =
-        new Chart(
-            canvas,
-            {
-
-                type: "line",
-
-
-                data: {
-
-                    datasets: [
-
-                        {
-
-                            label:
-                                "Temps impropi",
-
-                            data:
-                                dades,
-
-                            parsing: false,
-
-                            borderWidth: 3,
-
-                            pointRadius: 2,
-
-                            tension: 0
-
-                        }
-
-                    ]
-
-                },
-
-
-                options: {
-
-                    responsive: true,
-
-                    maintainAspectRatio: false,
-
-
-                    animation: {
-
-                        duration: 250
-
-                    },
-
-
-                    plugins: {
-
-                        legend: {
-
-                            labels: {
-
-                                color:
-                                    "#cfe2f3"
-
-                            }
-
-                        },
-
-                        title: {
-
-                            display: true,
-
-                            text:
-                                "Temps propi i temps impropi",
-
-                            color:
-                                "#cfe2f3"
-
-                        }
-
-                    },
-
-
-                    scales: {
-
-                        x: {
-
-                            type:
-                                "linear",
-
-                            title: {
-
-                                display: true,
-
-                                text:
-                                    "Temps propi (s)",
-
-                                color:
-                                    "#cfe2f3"
-
-                            },
-
-                            ticks: {
-
-                                color:
-                                    "#cfe2f3"
-
-                            }
-
-                        },
-
-
-                        y: {
-
-                            beginAtZero:
-                                true,
-
-                            title: {
-
-                                display: true,
-
-                                text:
-                                    "Temps impropi (s)",
-
-                                color:
-                                    "#cfe2f3"
-
-                            },
-
-                            ticks: {
-
-                                color:
-                                    "#cfe2f3"
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-        );
 }
 
 
 /* =====================================================
-   INICI
+   INICIALITZACIÓ
 ===================================================== */
 
 massaInput.value =
-    massa.value;
+    "3.4e38";
 
 periodeInput.value =
-    periode.value;
+    "1e6";
+
+
+massa.value =
+    "3.4e38";
+
+periode.value =
+    "1e6";
+
 
 calcular();
