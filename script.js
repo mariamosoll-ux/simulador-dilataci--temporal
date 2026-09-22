@@ -1,15 +1,9 @@
-/* =====================================================
-   CONSTANTS FÍSIQUES
-===================================================== */
-
 const G = 6.67430e-11;
 
 const c = 299792458;
 
 
-/* =====================================================
-   CONTROLS
-===================================================== */
+/* CONTROLS */
 
 const massaMantissa =
     document.getElementById("massaMantissa");
@@ -24,10 +18,6 @@ const periodeExponent =
     document.getElementById("periodeExponent");
 
 
-/* =====================================================
-   VALORS DELS CONTROLS
-===================================================== */
-
 const massaValor =
     document.getElementById("massaValor");
 
@@ -35,9 +25,7 @@ const periodeValor =
     document.getElementById("periodeValor");
 
 
-/* =====================================================
-   RESULTATS
-===================================================== */
+/* RESULTATS */
 
 const radi =
     document.getElementById("radi");
@@ -68,65 +56,70 @@ let chartGravitacional = null;
 
 
 /* =====================================================
-   NOTACIÓ CIENTÍFICA
+   FORMAT CIENTÍFIC DELS RESULTATS
 ===================================================== */
 
 function formatScientific(valor, decimals = 3) {
 
     if (!Number.isFinite(valor)) {
-
         return "No definit";
-
     }
-
 
     if (valor === 0) {
-
         return "0";
-
     }
-
 
     const exponent =
         Math.floor(
-            Math.log10(
-                Math.abs(valor)
-            )
+            Math.log10(Math.abs(valor))
         );
-
 
     const mantissa =
         valor /
-        Math.pow(
-            10,
-            exponent
-        );
-
+        Math.pow(10, exponent);
 
     return (
-
         mantissa
             .toFixed(decimals)
             .replace(".", ",")
-
         +
-
         " × 10"
-
         +
-
         "<sup>"
-
         +
-
         exponent
-
         +
-
         "</sup>"
-
     );
+}
 
+
+/* =====================================================
+   FORMAT NORMAL PER A LES GRÀFIQUES
+===================================================== */
+
+function formatNormal(valor) {
+
+    if (!Number.isFinite(valor)) {
+        return "";
+    }
+
+    if (valor === 0) {
+        return "0";
+    }
+
+    /*
+       Evita la notació científica de JavaScript.
+       Manté els nombres com a nombres normals.
+    */
+
+    return new Intl.NumberFormat(
+        "ca-ES",
+        {
+            useGrouping: true,
+            maximumFractionDigits: 6
+        }
+    ).format(valor);
 }
 
 
@@ -137,43 +130,23 @@ function formatScientific(valor, decimals = 3) {
 function obtenirMassa() {
 
     const mantissa =
-        Number(
-            massaMantissa.value
-        );
-
+        Number(massaMantissa.value);
 
     const exponent =
-        Number(
-            massaExponent.value
-        );
+        Number(massaExponent.value);
 
 
     if (
-
         !Number.isFinite(mantissa) ||
-
         !Number.isFinite(exponent) ||
-
         mantissa <= 0
-
     ) {
-
         return NaN;
-
     }
 
 
-    return (
-
-        mantissa *
-
-        Math.pow(
-            10,
-            exponent
-        )
-
-    );
-
+    return mantissa *
+        Math.pow(10, exponent);
 }
 
 
@@ -184,43 +157,23 @@ function obtenirMassa() {
 function obtenirPeriode() {
 
     const mantissa =
-        Number(
-            periodeMantissa.value
-        );
-
+        Number(periodeMantissa.value);
 
     const exponent =
-        Number(
-            periodeExponent.value
-        );
+        Number(periodeExponent.value);
 
 
     if (
-
         !Number.isFinite(mantissa) ||
-
         !Number.isFinite(exponent) ||
-
         mantissa <= 0
-
     ) {
-
         return NaN;
-
     }
 
 
-    return (
-
-        mantissa *
-
-        Math.pow(
-            10,
-            exponent
-        )
-
-    );
-
+    return mantissa *
+        Math.pow(10, exponent);
 }
 
 
@@ -233,24 +186,16 @@ function actualitzarControls() {
     const M =
         obtenirMassa();
 
-
     const T =
         obtenirPeriode();
 
 
     massaValor.innerHTML =
-
-        formatScientific(M)
-        +
-        " kg";
+        formatScientific(M) + " kg";
 
 
     periodeValor.innerHTML =
-
-        formatScientific(T)
-        +
-        " s";
-
+        formatScientific(T) + " s";
 }
 
 
@@ -266,125 +211,72 @@ function calcular() {
     const M =
         obtenirMassa();
 
-
     const T =
         obtenirPeriode();
 
 
     if (
-
         !Number.isFinite(M) ||
-
         !Number.isFinite(T) ||
-
         M <= 0 ||
-
         T <= 0
-
     ) {
-
         return;
-
     }
 
 
-    /* =================================================
-       RADI ORBITAL
-
-       R = ∛(GMT² / 4π²)
-    ================================================= */
+    /* RADI ORBITAL */
 
     const R =
-
         Math.cbrt(
-
             (
-
                 G *
-
                 M *
-
                 T *
-
                 T
-
             )
-
             /
-
             (
-
                 4 *
-
                 Math.PI *
-
                 Math.PI
-
             )
-
         );
 
 
-    /* =================================================
-       VELOCITAT ORBITAL
-
-       v = √(GM/R)
-    ================================================= */
+    /* VELOCITAT ORBITAL */
 
     const v =
-
         Math.sqrt(
-
             (G * M) / R
-
         );
 
 
-    /* =================================================
-       FACTOR CINEMÀTIC
-    ================================================= */
+    /* FACTOR CINEMÀTIC */
 
     const termeCinematic =
-
         1 -
-
         (
-
             v * v
-
         )
-
         /
-
         (
-
             c * c
-
         );
 
 
     let factorCinematicValor;
 
 
-    if (
-
-        termeCinematic > 0
-
-    ) {
+    if (termeCinematic > 0) {
 
         factorCinematicValor =
-
             1 /
-
             Math.sqrt(
-
                 termeCinematic
-
             );
 
-    }
-
-    else {
+    } else {
 
         factorCinematicValor =
             Infinity;
@@ -392,59 +284,35 @@ function calcular() {
     }
 
 
-    /* =================================================
-       FACTOR GRAVITACIONAL
-    ================================================= */
+    /* FACTOR GRAVITACIONAL */
 
     const termeGravitacional =
-
         1 -
-
         (
-
             2 *
-
             G *
-
             M
-
         )
-
         /
-
         (
-
             R *
-
             c *
-
             c
-
         );
 
 
     let factorGravitacionalValor;
 
 
-    if (
-
-        termeGravitacional > 0
-
-    ) {
+    if (termeGravitacional > 0) {
 
         factorGravitacionalValor =
-
             1 /
-
             Math.sqrt(
-
                 termeGravitacional
-
             );
 
-    }
-
-    else {
+    } else {
 
         factorGravitacionalValor =
             Infinity;
@@ -452,94 +320,62 @@ function calcular() {
     }
 
 
-    /* =================================================
-       RESULTATS
-    ================================================= */
+    /* MOSTRAR RESULTATS */
 
     radi.innerHTML =
-
         formatScientific(R);
 
 
     velocitat.innerHTML =
-
         formatScientific(v);
 
 
     tempsCinematic.innerHTML =
-
         formatScientific(
-
             factorCinematicValor
-
         );
 
 
     factorCinematic.innerHTML =
-
         formatScientific(
-
             factorCinematicValor
-
         );
 
 
     radiGravitacional.innerHTML =
-
         formatScientific(R);
 
 
     tempsGravitacional.innerHTML =
-
         formatScientific(
-
             factorGravitacionalValor
-
         );
 
 
     factorGravitacional.innerHTML =
-
         formatScientific(
-
             factorGravitacionalValor
-
         );
 
 
-    /* =================================================
-       GRÀFIQUES
-    ================================================= */
+    /* ACTUALITZAR GRÀFIQUES */
 
     chartCinematic =
-
         actualitzarGrafica(
-
             "graficaCinematic",
-
             factorCinematicValor,
-
             "Temps propi i temps impropi — efecte cinemàtic",
-
             chartCinematic
-
         );
 
 
     chartGravitacional =
-
         actualitzarGrafica(
-
             "graficaGravitacional",
-
             factorGravitacionalValor,
-
             "Temps propi i temps impropi — efecte gravitacional",
-
             chartGravitacional
-
         );
-
 }
 
 
@@ -550,15 +386,10 @@ function calcular() {
 function generarDades(factor) {
 
     if (
-
         !Number.isFinite(factor) ||
-
         factor <= 0
-
     ) {
-
         return [];
-
     }
 
 
@@ -566,13 +397,9 @@ function generarDades(factor) {
 
 
     for (
-
         let i = 0;
-
         i <= 100;
-
         i++
-
     ) {
 
         const tempsPropi =
@@ -585,11 +412,9 @@ function generarDades(factor) {
 
         dades.push({
 
-            x:
-                tempsPropi,
+            x: tempsPropi,
 
-            y:
-                tempsImpropi
+            y: tempsImpropi
 
         });
 
@@ -597,32 +422,21 @@ function generarDades(factor) {
 
 
     return dades;
-
 }
 
 
 /* =====================================================
-   ACTUALITZAR GRÀFICA
+   GRÀFIQUES
 ===================================================== */
 
 function actualitzarGrafica(
-
     id,
-
     factor,
-
     titol,
-
     graficaAnterior
-
 ) {
 
-
-    if (
-
-        graficaAnterior !== null
-
-    ) {
+    if (graficaAnterior !== null) {
 
         graficaAnterior.destroy();
 
@@ -630,11 +444,8 @@ function actualitzarGrafica(
 
 
     if (
-
         !Number.isFinite(factor) ||
-
         factor <= 0
-
     ) {
 
         return null;
@@ -651,15 +462,11 @@ function actualitzarGrafica(
 
 
     const novaGrafica =
-
         new Chart(
-
             canvas,
-
             {
 
-                type:
-                    "line",
+                type: "line",
 
 
                 data: {
@@ -766,7 +573,6 @@ function actualitzarGrafica(
                                         const x =
                                             context.parsed.x;
 
-
                                         const y =
                                             context.parsed.y;
 
@@ -775,13 +581,13 @@ function actualitzarGrafica(
 
                                             "Temps propi: "
                                             +
-                                            formatScientific(x)
+                                            formatNormal(x)
                                             +
                                             " s",
 
                                             "Temps impropi: "
                                             +
-                                            formatScientific(y)
+                                            formatNormal(y)
                                             +
                                             " s"
 
@@ -824,66 +630,74 @@ function actualitzarGrafica(
                             ticks: {
 
                                 color:
-                                    "#cfe2f3"
+                                    "#cfe2f3",
+
+                                callback:
+                                    function(value) {
+
+                                        return formatNormal(
+                                            Number(value)
+                                        );
+
+                                    }
 
                             }
 
                         },
-y: {
 
-    beginAtZero:
-        true,
 
-    title: {
+                        y: {
 
-        display:
-            true,
+                            beginAtZero:
+                                true,
 
-        text:
-            "Temps impropi (s)",
 
-        color:
-            "#cfe2f3"
+                            title: {
 
-    },
+                                display:
+                                    true,
 
-    ticks: {
+                                text:
+                                    "Temps impropi (s)",
 
-        color:
-            "#cfe2f3",
+                                color:
+                                    "#cfe2f3"
 
-        callback:
-            function(value) {
+                            },
 
-                return Number(value).toLocaleString(
-                    "ca-ES",
-                    {
-                        maximumFractionDigits: 6
-                    }
-                );
 
-            }
+                            ticks: {
 
-    }
+                                color:
+                                    "#cfe2f3",
 
-}
+                                callback:
+                                    function(value) {
+
+                                        return formatNormal(
+                                            Number(value)
+                                        );
+
+                                    }
+
+                            }
+
+                        }
 
                     }
 
                 }
 
             }
-
         );
 
 
     return novaGrafica;
-
 }
 
 
 /* =====================================================
-   CONTROLS
+   ACTUALITZACIÓ AUTOMÀTICA
 ===================================================== */
 
 massaMantissa.addEventListener(
@@ -911,7 +725,7 @@ periodeExponent.addEventListener(
 
 
 /* =====================================================
-   INICIALITZACIÓ
+   INICIAR
 ===================================================== */
 
 calcular();
