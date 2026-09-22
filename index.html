@@ -55,7 +55,6 @@
     </div>
 
 
-
     <h2>Paràmetres del sistema</h2>
 
 
@@ -71,23 +70,26 @@
             </label>
 
             <input
-                type="number"
+                type="text"
                 id="massaInput"
-                step="1e36"
                 value="3.4e38"
+                inputmode="decimal"
             >
+
+            <span class="unitat-input">
+                kg
+            </span>
 
             <input
                 type="range"
                 id="massa"
                 min="1e30"
-                max="1e40"
+                max="1e42"
                 step="1e36"
                 value="3.4e38"
             >
 
         </div>
-
 
 
         <!-- PERÍODE -->
@@ -99,11 +101,10 @@
             </label>
 
             <input
-                type="number"
+                type="text"
                 id="periodeInput"
-                min="1"
-                step="1"
-                value="1000000"
+                value="1e6"
+                inputmode="decimal"
             >
 
             <span class="unitat-input">
@@ -114,8 +115,8 @@
                 type="range"
                 id="periode"
                 min="1"
-                max="1e12"
-                step="1e6"
+                max="1e15"
+                step="1e9"
                 value="1e6"
             >
 
@@ -126,7 +127,9 @@
 
 
 
-    <!-- DILATACIÓ CINEMÀTICA -->
+    <!-- =================================================
+         DILATACIÓ CINEMÀTICA
+    ================================================== -->
 
     <section class="apartat">
 
@@ -211,7 +214,8 @@
 
                 <div class="formula-petita">
                     \[
-                    t=\frac{t_0}{\sqrt{1-\frac{v^2}{c^2}}}
+                    t=\frac{t_0}
+                    {\sqrt{1-\frac{v^2}{c^2}}}
                     \]
                 </div>
 
@@ -233,6 +237,29 @@
             </div>
 
 
+
+            <div class="resultat important">
+
+                <div class="formula-petita">
+                    \[
+                    \frac{t}{t_0}
+                    \]
+                </div>
+
+                <span class="titol-resultat">
+                    FACTOR DE DILATACIÓ
+                </span>
+
+                <strong id="factorCinematic"></strong>
+
+                <div class="descripcio-temps">
+                    Relació entre el temps impropi
+                    i el temps propi.
+                </div>
+
+            </div>
+
+
         </div>
 
 
@@ -247,7 +274,9 @@
 
 
 
-    <!-- DILATACIÓ GRAVITACIONAL -->
+    <!-- =================================================
+         DILATACIÓ GRAVITACIONAL
+    ================================================== -->
 
     <section class="apartat">
 
@@ -347,6 +376,11 @@
                 </span>
 
                 <strong id="factorGravitacional"></strong>
+
+                <div class="descripcio-temps">
+                    Relació entre el temps impropi
+                    i el temps propi.
+                </div>
 
             </div>
 
