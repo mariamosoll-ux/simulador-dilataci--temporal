@@ -59,7 +59,7 @@ h2 {
 
 .introduccio {
 
-    background-color: #0b385d;
+    background-color: #0a3558;
 
     padding: 25px;
 
@@ -123,8 +123,7 @@ p {
 
     display: grid;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 
     gap: 25px;
 
@@ -177,30 +176,56 @@ p {
 }
 
 
-input[type="range"] {
+/* =====================================================
+   CONTROLS EN NOTACIÓ CIENTÍFICA
+===================================================== */
 
-    width: 100%;
+.scientific-control {
 
-    accent-color: #0b5394;
+    display: flex;
 
-    cursor: pointer;
+    align-items: center;
 
-    margin: 8px 0;
+    justify-content: center;
+
+    gap: 10px;
 
 }
 
 
-.rang {
+.scientific-control input {
 
-    display: flex;
+    width: 110px;
 
-    justify-content: space-between;
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #061a2d;
+
+    color: white;
+
+    font-size: 16px;
+
+    text-align: center;
+
+}
+
+
+.scientific-control span {
 
     color: #cfe2f3;
 
-    font-size: 14px;
+    font-size: 18px;
 
-    margin-top: 8px;
+}
+
+
+.scientific-control input:focus {
+
+    outline: 2px solid #0b5394;
 
 }
 
@@ -224,8 +249,7 @@ input[type="range"] {
 
     display: grid;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 
     gap: 20px;
 
@@ -393,6 +417,13 @@ input[type="range"] {
     .resultats {
 
         grid-template-columns: 1fr;
+
+    }
+
+
+    .scientific-control {
+
+        flex-wrap: wrap;
 
     }
 
